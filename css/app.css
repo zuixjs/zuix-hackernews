@@ -82,6 +82,19 @@ footer {
     min-height: 85px;
 }
 
+.message {
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.single-line {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 footer .list-info {
     color: white;
     font-size: 120%;
@@ -109,6 +122,11 @@ footer .page-nav {
     .list-item {
         min-height: 72px;
     }
+    .message {
+        padding-top: 14px;
+        padding-left: 14px;
+        padding-right: 14px;
+    }
 }
 
 @media only screen and (max-width: 400px) {
@@ -121,5 +139,9 @@ footer .page-nav {
     .list-item {
         min-height: 64px;
     }
+    .message {
+        padding-top: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 }
-

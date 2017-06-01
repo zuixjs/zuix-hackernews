@@ -1,0 +1,25 @@
+.main-header h1 {
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+.main-header h3 {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+a[data-ui-field="title"] {
+    color: black;
+    text-decoration: none;
+}
+
+.main-header {
+    padding: 16px;
+    margin-bottom: 8px;
+}
+
+div[data-ui-field="thread"] {
+   overflow-x: hidden;
+}
+span[data-ui-field="count"] {
+    margin-left: 24px;
+}
