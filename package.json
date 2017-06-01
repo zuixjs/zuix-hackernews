@@ -1,6 +1,12 @@
 {
   "private": true,
+  "scripts": {
+    "start": "http-server ./"
+  },
   "dependencies": {
-    "zuix": "^0.4.9-9"
+    "zuix-dist": "^0.4.9-9"
+  },
+  "devDependencies": {
+    "http-server": "^0.9.0"
   }
 }

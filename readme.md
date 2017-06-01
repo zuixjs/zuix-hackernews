@@ -1,12 +1,23 @@
 # ZUIX • Hacker News Web
 
 Example of using **list_view** component with progressive/lazy loading.
+
+https://g-labs-sw.github.io/zuix-hackernews/
+
 Each item in the list is loaded on-the-fly by using official
 HN firebase API https://github.com/HackerNews/API.
 
-Download [zuix_hackernews_rev1.zip](https://genielabs.github.io/zuix/examples/zuix_hackernews_rev1.zip)
+#### Local testing
 
-#### About ZUIX
+Issue the following commands to install development dependencies
+and start the local web server (port 8080).
+
+```shell
+npm install
+npm run start
+```
+
+## About ZUIX
 
 > ZUIX is a lite JavaScript framework (~11kB) for creating component-based web sites and applications.
 
@@ -24,9 +35,9 @@ Main features:
 - Integrated localization engine
 
 
-## Resources
+### Resources
 
-- [ZUIX Home and Docs](http://zuix.it)
+- [ZUIX Home and Docs](https://genielabs.github.io/zuix)
 - [Source code](https://github.com/genielabs/zuix)
 
 ### Support
