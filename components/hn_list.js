@@ -26,6 +26,7 @@ zuix.controller(function (cp) {
             return statusInfo;
         });
         cp.expose('page', function (p) {
+            cp.view().get().scrollTop = 0;
             if (!isNaN(p))
                 statusInfo.pagesCurrent = p;
             if (listView != null)

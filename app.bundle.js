@@ -26,6 +26,7 @@
             return statusInfo;
         });
         cp.expose('page', function (p) {
+            cp.view().get().scrollTop = 0;
             if (!isNaN(p))
                 statusInfo.pagesCurrent = p;
             if (listView != null)
@@ -106,7 +107,7 @@
         });
     }
 
-}},{"componentId":"components\u002Flist_view","controller":function (cp) {
+},"css_applied":true},{"componentId":"components\u002Flist_view","controller":function (cp) {
 
     var listItems = [], itemOptions;
     var currentPage = 0, itemsPerPage = 20, loadedCount = 0;
@@ -277,6 +278,97 @@
         };
         card.on('mouseover', 'item:enter', payload)
             .on('mouseout', 'item:leave', payload);
+    }
+
+},"css_applied":true},{"componentId":"components\u002Fhn_thread","view":"\u003Cdiv self=\"size-x1\" layout=\"column center-center\"\u003E\n\n    \u003Cdiv class=\"main-header\" self=\"size-xlarge top-center\"\u003E\n        \u003Ch1\u003E\u003Ca data-ui-field=\"title\"\u003EThread title...\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\n        \u003Ca data-ui-field=\"url\" class=\"single-line\"\u003E\u003C\u002Fa\u003E\n        \u003Ch3\u003E\n            \u003Cspan data-ui-field=\"date\"\u003E...\u003C\u002Fspan\u003E\n            by \u003Cspan data-ui-field=\"user\"\u003E...\u003C\u002Fspan\u003E\n            \u002F \u003Cspan data-ui-field=\"score\"\u003E...\u003C\u002Fspan\u003E points\n        \u003C\u002Fh3\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"thread\"\n         layout=\"column top-stretch\"\n         self=\"size-xlarge top-center\"\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"loading\"\n         self=\"size-xlarge center-center\"\n         align=\"center\"\u003E\n        \u003Ch1 class=\"animated bounce infinite\"\u003E... loading ...\u003C\u002Fh1\u003E\n    \u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".main-header h1 {\n    margin-top: 8px;\n    margin-bottom: 0;\n}\n.main-header h3 {\n    margin-top: 8px;\n    margin-bottom: 8px;\n}\n\na[data-ui-field=\"title\"] {\n    color: black;\n    text-decoration: none;\n}\n\n.main-header {\n    padding: 16px;\n    margin-bottom: 8px;\n}\n\ndiv[data-ui-field=\"thread\"] {\n   overflow-x: hidden;\n}\nspan[data-ui-field=\"count\"] {\n    margin-left: 24px;\n}","controller":function (cp) {
+    'use strict';
+
+    cp.create = function () {
+        cp.expose('load', function(id, callback) {
+            firebase.loadItem(id, function (itemData) {
+                render(itemData);
+                callback(itemData);
+            });
+        });
+    };
+
+    cp.destroy = function () {
+        clear();
+    };
+
+    function render(item) {
+        cp.view().get().scrollTop = 0;
+        cp.field('title').html(item.title);
+        if (item.url != null) {
+            cp.field('title').attr('href', item.url);
+            cp.field('url').html(item.shorturl)
+                .attr('href', item.url);
+        }
+        cp.field('user').html(item.by);
+        cp.field('score').html(item.score);
+        cp.field('date').html(item.timestamp);
+        cp.field('thread').hide();
+        cp.field('loading').show();
+        setTimeout(function () {
+            clear();
+            zuix.$.each(item.kids, function (k, v) {
+
+                var message = zuix.createComponent('components/hn_message', {
+                    lazyLoad: true,
+                    ready: function (ctx) {
+                        ctx.load(v);
+                    }
+                });
+                message.container().style['min-height'] = '48px';
+                cp.field('thread').append(message.container());
+
+            });
+            cp.field('loading').hide();
+            cp.field('thread').show();
+            zuix.componentize(cp.field('thread'));
+        }, 100);
+    }
+
+    function clear() {
+        var messages = cp.field('thread').children();
+        for(var i = messages.length()-1; i >= 0; i--)
+            zuix.unload(messages.get(i));
+    }
+
+}},{"componentId":"components\u002Fhn_message","view":"\u003Cdiv class=\"message\"\u003E\n\n    \u003Cdiv class=\"header\"\u003E\n        \u003Cspan class=\"from\" data-ui-field=\"by\"\u003E\u003C\u002Fspan\u003E\n        \u003Cspan data-ui-field=\"time\"\u003E\u003C\u002Fspan\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"body\"\u003E\n\n        Loading message...\n\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"replies\" class=\"replies\"\u003E\u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".header {\n    font-size: 110%;\n    margin-bottom: 8px;\n}\n\n.from {\n    font-weight: bold;\n    margin-right: 16px;\n}\n\n.replies {\n    border-left: dotted 1px rgba(0,0,0,0.2);\n}\n\npre {\n    font-size: 95%;\n    white-space: pre-wrap;       \u002F* Since CSS 2.1 *\u002F\n    white-space: -moz-pre-wrap;  \u002F* Mozilla, since 1999 *\u002F\n    white-space: -pre-wrap;      \u002F* Opera 4-6 *\u002F\n    white-space: -o-pre-wrap;    \u002F* Opera 7 *\u002F\n    word-wrap: break-word;       \u002F* Internet Explorer 5.5+ *\u002F\n}\n","controller":function (cp) {
+    'use strict';
+
+    cp.create = function () {
+        cp.expose('load', function(id) {
+            firebase.loadItem(id, render);
+        });
+    };
+
+    cp.destroy = function () {
+        clear();
+    };
+
+    function render(item) {
+        cp.field('time').html(item.timestamp);
+        cp.field('by').html(item.by);
+        cp.field('body').html(item.text);
+        zuix.$.each(item.kids, function (k, v) {
+            var message = zuix.createComponent('components/hn_message', {
+                lazyLoad: true,
+                ready: function (ctx) {
+                    ctx.load(v);
+                }
+            });
+            message.container().style['min-height'] = '48px';
+            cp.field('replies').append(message.container());
+        });
+        zuix.componentize(cp.field('replies'));
+    }
+
+    function clear() {
+        var messages = cp.field('replies').children();
+        for(var i = messages.length()-1; i >= 0; i--)
+            zuix.unload(messages.get(i));
     }
 
 },"css_applied":true}]);
