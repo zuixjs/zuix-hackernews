@@ -1,0 +1,7 @@
+{
+  "name": "ZUIX Hacker News",
+  "short_name": "HackerNews",
+  "icons": [ ],
+  "start_url": "index.html",
+  "display": "fullscreen"
+}
