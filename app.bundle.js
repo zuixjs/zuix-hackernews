@@ -107,7 +107,7 @@
         });
     }
 
-},"css_applied":true},{"componentId":"components\u002Flist_view","controller":function (cp) {
+}},{"componentId":"components\u002Flist_view","controller":function (cp) {
 
     var listItems = [], itemOptions;
     var currentPage = 0, itemsPerPage = 20, loadedCount = 0;
@@ -269,6 +269,8 @@
                 .attr('href', item.url);
             cp.field('title')
                 .attr('href', item.url);
+        } else {
+            cp.field('title').attr('href', '#/comments/'+item.id);
         }
         // Custom Events for this component
         var card = cp.field('card');
@@ -280,7 +282,7 @@
             .on('mouseout', 'item:leave', payload);
     }
 
-},"css_applied":true},{"componentId":"components\u002Fhn_thread","view":"\u003Cdiv self=\"size-x1\" layout=\"column center-center\"\u003E\n\n    \u003Cdiv class=\"main-header\" self=\"size-xlarge top-center\"\u003E\n        \u003Ch1\u003E\u003Ca data-ui-field=\"title\"\u003EThread title...\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\n        \u003Ca data-ui-field=\"url\" class=\"single-line\"\u003E\u003C\u002Fa\u003E\n        \u003Ch3\u003E\n            \u003Cspan data-ui-field=\"date\"\u003E...\u003C\u002Fspan\u003E\n            by \u003Cspan data-ui-field=\"user\"\u003E...\u003C\u002Fspan\u003E\n            \u002F \u003Cspan data-ui-field=\"score\"\u003E...\u003C\u002Fspan\u003E points\n        \u003C\u002Fh3\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"thread\"\n         layout=\"column top-stretch\"\n         self=\"size-xlarge top-center\"\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"loading\"\n         self=\"size-xlarge center-center\"\n         align=\"center\"\u003E\n        \u003Ch1 class=\"animated bounce infinite\"\u003E... loading ...\u003C\u002Fh1\u003E\n    \u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".main-header h1 {\n    margin-top: 8px;\n    margin-bottom: 0;\n}\n.main-header h3 {\n    margin-top: 8px;\n    margin-bottom: 8px;\n}\n\na[data-ui-field=\"title\"] {\n    color: black;\n    text-decoration: none;\n}\n\n.main-header {\n    padding: 16px;\n    margin-bottom: 8px;\n}\n\ndiv[data-ui-field=\"thread\"] {\n   overflow-x: hidden;\n}\nspan[data-ui-field=\"count\"] {\n    margin-left: 24px;\n}","controller":function (cp) {
+},"css_applied":true},{"componentId":"components\u002Fhn_thread","view":"\u003Cdiv self=\"size-x1\" layout=\"column center-center\"\u003E\n\n    \u003Cdiv class=\"main-header\" self=\"size-xlarge top-center\"\u003E\n        \u003Ch1\u003E\u003Ca data-ui-field=\"title\"\u003EThread title...\u003C\u002Fa\u003E\u003C\u002Fh1\u003E\n        \u003Ca data-ui-field=\"url\" class=\"single-line\"\u003E\u003C\u002Fa\u003E\n        \u003Ch3\u003E\n            \u003Cspan data-ui-field=\"date\"\u003E...\u003C\u002Fspan\u003E\n            by \u003Cspan data-ui-field=\"user\"\u003E...\u003C\u002Fspan\u003E\n            \u002F \u003Cspan data-ui-field=\"score\"\u003E...\u003C\u002Fspan\u003E points\n        \u003C\u002Fh3\u003E\n        \u003Cp data-ui-field=\"body\"\u003E\u003C\u002Fp\u003E\n        \u003Ca data-ui-field=\"reply\"\u003E&#8631; Reply\u003C\u002Fa\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"thread\"\n         layout=\"column top-stretch\"\n         self=\"size-xlarge top-center\"\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"loading\"\n         self=\"size-xlarge center-center\"\n         align=\"center\"\u003E\n        \u003Ch1 class=\"animated bounce infinite\"\u003E... loading ...\u003C\u002Fh1\u003E\n    \u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".main-header h1 {\n    margin-top: 8px;\n    margin-bottom: 0;\n}\n.main-header h3 {\n    margin-top: 8px;\n    margin-bottom: 8px;\n}\n\na[data-ui-field=\"reply\"] {\n    color: dodgerblue;\n    cursor: pointer;\n    font-weight: bold;\n    margin-right: 2px;\n    text-decoration: none;\n    text-transform: uppercase;\n}\n\na[data-ui-field=\"title\"] {\n    color: black;\n    text-decoration: none;\n}\n\n.main-header {\n    padding: 16px;\n    margin-bottom: 8px;\n}\n\ndiv[data-ui-field=\"thread\"] {\n   overflow-x: hidden;\n}\ndiv[data-ui-field=\"thread\"] \u003E div \u003E div.message {\n    padding-bottom: 16px;\n    border-bottom: dotted 2px rgba(0,0,0,0.3);\n}\n\nspan[data-ui-field=\"count\"] {\n    margin-left: 24px;\n}","controller":function (cp) {
     'use strict';
 
     cp.create = function () {
@@ -307,6 +309,11 @@
         cp.field('user').html(item.by);
         cp.field('score').html(item.score);
         cp.field('date').html(item.timestamp);
+        if (item.text != null)
+            cp.field('body').html(item.text);
+        else
+            cp.field('body').html('');
+        cp.field('reply').attr('href', 'https://news.ycombinator.com/reply?id='+item.id);
         cp.field('thread').hide();
         cp.field('loading').show();
         setTimeout(function () {
@@ -335,7 +342,7 @@
             zuix.unload(messages.get(i));
     }
 
-}},{"componentId":"components\u002Fhn_message","view":"\u003Cdiv class=\"message\"\u003E\n\n    \u003Cdiv class=\"header\"\u003E\n        \u003Cspan class=\"from\" data-ui-field=\"by\"\u003E\u003C\u002Fspan\u003E\n        \u003Cspan data-ui-field=\"time\"\u003E\u003C\u002Fspan\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"body\"\u003E\n\n        Loading message...\n\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"replies\" class=\"replies\"\u003E\u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".header {\n    font-size: 110%;\n    margin-bottom: 8px;\n}\n\n.from {\n    font-weight: bold;\n    margin-right: 16px;\n}\n\n.replies {\n    border-left: dotted 1px rgba(0,0,0,0.2);\n}\n\npre {\n    font-size: 95%;\n    white-space: pre-wrap;       \u002F* Since CSS 2.1 *\u002F\n    white-space: -moz-pre-wrap;  \u002F* Mozilla, since 1999 *\u002F\n    white-space: -pre-wrap;      \u002F* Opera 4-6 *\u002F\n    white-space: -o-pre-wrap;    \u002F* Opera 7 *\u002F\n    word-wrap: break-word;       \u002F* Internet Explorer 5.5+ *\u002F\n}\n","controller":function (cp) {
+}},{"componentId":"components\u002Fhn_message","view":"\u003Cdiv class=\"message\"\u003E\n\n    \u003Cdiv class=\"header\"\u003E\n        \u003Cspan class=\"from\" data-ui-field=\"by\"\u003E\u003C\u002Fspan\u003E\n        \u003Cspan data-ui-field=\"time\"\u003E\u003C\u002Fspan\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cp data-ui-field=\"body\"\u003E\n\n        Loading message...\n\n    \u003C\u002Fp\u003E\n\n    \u003Cdiv class=\"toolbar\"\u003E\n        \u003Ca data-ui-field=\"replies-toggle\"\u003E\u003Ci class=\"arrow-close\"\u003E\u003C\u002Fi\u003E\u003C\u002Fa\u003E\n        \u003Cspan data-ui-field=\"replies-count\"\u003E\u003C\u002Fspan\u003E\n        \u003Ca data-ui-field=\"reply\"\u003E&#8631; Reply\u003C\u002Fa\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"replies\" class=\"replies\"\u003E\u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"bottom-bar\" class=\"toolbar\"\u003E\n        \u003Ca data-ui-field=\"replies-top\"\u003E\u003Ci class=\"arrow-top\"\u003E\u003C\u002Fi\u003E\u003C\u002Fa\u003E\n    \u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".header {\n    font-size: 110%;\n    margin-bottom: 8px;\n}\n\n.from {\n    font-weight: bold;\n    margin-right: 10px;\n}\n\n.replies {\n    border-left: dotted 1px rgba(0,0,0,0.2);\n}\n\n.toolbar {\n    font-size: 90%;\n    font-weight: bold;\n    text-transform: uppercase;\n    padding: 8px;\n    margin-left: -12px;\n}\n.toolbar span {\n    margin-right: 12px;\n}\n.toolbar a {\n    color: dodgerblue;\n    cursor: pointer;\n    margin-right: 2px;\n    text-decoration: none;\n}\n\n.arrow-open:after {\n    content: '\\1f863 \\ Collapse';\n    font-style: normal;\n}\n\n.arrow-close:after {\n    content: '\\1f862 \\ Expand';\n    font-style: normal;\n}\n\n.arrow-top:after {\n    content: '\\1f861 \\ Top';\n    font-style: normal;\n}\n\npre {\n    font-size: 95%;\n    white-space: pre-wrap;       \u002F* Since CSS 2.1 *\u002F\n    white-space: -moz-pre-wrap;  \u002F* Mozilla, since 1999 *\u002F\n    white-space: -pre-wrap;      \u002F* Opera 4-6 *\u002F\n    white-space: -o-pre-wrap;    \u002F* Opera 7 *\u002F\n    word-wrap: break-word;       \u002F* Internet Explorer 5.5+ *\u002F\n}\n","controller":function (cp) {
     'use strict';
 
     cp.create = function () {
@@ -352,6 +359,29 @@
         cp.field('time').html(item.timestamp);
         cp.field('by').html(item.by);
         cp.field('body').html(item.text);
+        cp.field('reply').attr('href', 'https://news.ycombinator.com/reply?id='+item.id);
+        cp.field('replies').hide();
+        cp.field('bottom-bar').hide();
+        // Message thread replies
+        if (item.kids != null) {
+            // Collapse / Expand message thread
+            cp.field('replies-toggle').show('inline').on('click', function () {
+                this.removeClass('animated flash');
+                if (cp.field('replies').display()==='none')
+                    openThread();
+                else
+                    closeThread();
+            });
+            // Handle button for moving to top of message thread
+            cp.field('replies-top').on('click', function () {
+                var scroller = this.parent('.scrollable');
+                zuix.$.scrollTo(scroller.get(), -(cp.field('replies').get().offsetHeight-16), 300);
+            });
+            var countText = (item.kids.length > 1 ? 'replies' : 'reply');
+            cp.field('replies-count').html(item.kids.length + ' ' + countText);
+        } else {
+            cp.field('replies-toggle').hide();
+        }
         zuix.$.each(item.kids, function (k, v) {
             var message = zuix.createComponent('components/hn_message', {
                 lazyLoad: true,
@@ -369,6 +399,25 @@
         var messages = cp.field('replies').children();
         for(var i = messages.length()-1; i >= 0; i--)
             zuix.unload(messages.get(i));
+    }
+
+    function openThread() {
+        cp.field('replies-toggle').find('i')
+            .removeClass('arrow-close')
+            .addClass('arrow-open');
+        cp.field('replies').show();
+        cp.field('bottom-bar').show();
+        cp.field('replies-collapse').show('inline');
+        zuix.componentize(cp.field('replies'));
+    }
+
+    function closeThread() {
+        cp.field('replies-toggle').find('i')
+            .removeClass('arrow-open')
+            .addClass('arrow-close');
+        cp.field('replies').hide();
+        cp.field('bottom-bar').hide();
+        cp.field('replies-collapse').hide();
     }
 
 },"css_applied":true}]);

@@ -17,6 +17,10 @@ npm install
 npm run start
 ```
 
+If you change components' source code, remember to comment the `app.bundle.js`
+file inclusion in the `index.html` file otherwise old components will be loaded from the
+bundle. For more information about *bundling* see the ZUIX docs.
+
 ## About ZUIX
 
 > ZUIX is a lite JavaScript framework (~11kB) for creating component-based web sites and applications.

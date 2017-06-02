@@ -5,11 +5,43 @@
 
 .from {
     font-weight: bold;
-    margin-right: 16px;
+    margin-right: 10px;
 }
 
 .replies {
     border-left: dotted 1px rgba(0,0,0,0.2);
+}
+
+.toolbar {
+    font-size: 90%;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 8px;
+    margin-left: -12px;
+}
+.toolbar span {
+    margin-right: 12px;
+}
+.toolbar a {
+    color: dodgerblue;
+    cursor: pointer;
+    margin-right: 2px;
+    text-decoration: none;
+}
+
+.arrow-open:after {
+    content: '\1f863 \ Collapse';
+    font-style: normal;
+}
+
+.arrow-close:after {
+    content: '\1f862 \ Expand';
+    font-style: normal;
+}
+
+.arrow-top:after {
+    content: '\1f861 \ Top';
+    font-style: normal;
 }
 
 pre {

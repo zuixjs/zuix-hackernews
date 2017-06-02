@@ -26,6 +26,8 @@ zuix.controller(function (cp) {
                 .attr('href', item.url);
             cp.field('title')
                 .attr('href', item.url);
+        } else {
+            cp.field('title').attr('href', '#/comments/'+item.id);
         }
         // Custom Events for this component
         var card = cp.field('card');

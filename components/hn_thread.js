@@ -25,6 +25,11 @@ zuix.controller(function (cp) {
         cp.field('user').html(item.by);
         cp.field('score').html(item.score);
         cp.field('date').html(item.timestamp);
+        if (item.text != null)
+            cp.field('body').html(item.text);
+        else
+            cp.field('body').html('');
+        cp.field('reply').attr('href', 'https://news.ycombinator.com/reply?id='+item.id);
         cp.field('thread').hide();
         cp.field('loading').show();
         setTimeout(function () {

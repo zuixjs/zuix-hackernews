@@ -7,6 +7,15 @@
     margin-bottom: 8px;
 }
 
+a[data-ui-field="reply"] {
+    color: dodgerblue;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
 a[data-ui-field="title"] {
     color: black;
     text-decoration: none;
@@ -20,6 +29,11 @@ a[data-ui-field="title"] {
 div[data-ui-field="thread"] {
    overflow-x: hidden;
 }
+div[data-ui-field="thread"] > div > div.message {
+    padding-bottom: 16px;
+    border-bottom: dotted 2px rgba(0,0,0,0.3);
+}
+
 span[data-ui-field="count"] {
     margin-left: 24px;
 }

@@ -34,7 +34,7 @@ var app = new (function() {
     });
 
     // Set lazy loading and show the current view
-    zuix.lazyLoad(true, 1.0);
+    zuix.lazyLoad(true, 1.5);
     showCurrentView();
 
     // parse URL hash in the form #/<page>/<args>
