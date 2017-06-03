@@ -10,6 +10,13 @@ var app = new (function() {
 
     var currentFeed = null;
 
+    // setup service worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('./service-worker.js')
+            .then(function() { console.log('ServiceWorker', 'Registered'); });
+    }
+
     // loading options for the hn_list component
     window.hnListOptions = {
         ready: function (hnList) {
@@ -33,6 +40,12 @@ var app = new (function() {
         zuix.componentize();
     });
 
+    // Hide the about dialog at startup
+    zuix.field('about').on('click', function(){
+        this.hide();
+    }).on('keydown', function () {
+        this.hide();
+    }).hide();
     // Set lazy loading and show the current view
     zuix.lazyLoad(true, 1.5);
     showCurrentView();
@@ -149,6 +162,9 @@ var app = new (function() {
     this.prev = function () {
         var p = currentFeed.info();
         location.href = '#/'+p.path+'/'+(p.pagesCurrent-1);
+    };
+    this.about = function () {
+        zuix.field('about').show().get().focus();
     };
     return this;
 

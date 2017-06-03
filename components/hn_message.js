@@ -12,6 +12,11 @@ zuix.controller(function (cp) {
     };
 
     function render(item) {
+        if (item.dead || item.deleted) {
+            console.log("DELETED", cp.context);
+            zuix.unload(cp.context);
+            return;
+        }
         cp.field('time').html(item.timestamp);
         cp.field('by').html(item.by);
         cp.field('body').html(item.text);

@@ -256,6 +256,11 @@
     };
 
     function render(item) {
+        if (item.dead || item.deleted) {
+            console.log("DELETED", cp.context);
+            zuix.unload(cp.context);
+            return;
+        }
         cp.field('title').html(item.title);
         cp.field('user').html(item.by);
         cp.field('score').html(item.score);
@@ -342,7 +347,7 @@
             zuix.unload(messages.get(i));
     }
 
-}},{"componentId":"components\u002Fhn_message","view":"\u003Cdiv class=\"message\"\u003E\n\n    \u003Cdiv class=\"header\"\u003E\n        \u003Cspan class=\"from\" data-ui-field=\"by\"\u003E\u003C\u002Fspan\u003E\n        \u003Cspan data-ui-field=\"time\"\u003E\u003C\u002Fspan\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cp data-ui-field=\"body\"\u003E\n\n        Loading message...\n\n    \u003C\u002Fp\u003E\n\n    \u003Cdiv class=\"toolbar\"\u003E\n        \u003Ca data-ui-field=\"replies-toggle\"\u003E\u003Ci class=\"arrow-close\"\u003E\u003C\u002Fi\u003E\u003C\u002Fa\u003E\n        \u003Cspan data-ui-field=\"replies-count\"\u003E\u003C\u002Fspan\u003E\n        \u003Ca data-ui-field=\"reply\"\u003E&#8631; Reply\u003C\u002Fa\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"replies\" class=\"replies\"\u003E\u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"bottom-bar\" class=\"toolbar\"\u003E\n        \u003Ca data-ui-field=\"replies-top\"\u003E\u003Ci class=\"arrow-top\"\u003E\u003C\u002Fi\u003E\u003C\u002Fa\u003E\n    \u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".header {\n    font-size: 110%;\n    margin-bottom: 8px;\n}\n\n.from {\n    font-weight: bold;\n    margin-right: 10px;\n}\n\n.replies {\n    border-left: dotted 1px rgba(0,0,0,0.2);\n}\n\n.toolbar {\n    font-size: 90%;\n    font-weight: bold;\n    text-transform: uppercase;\n    padding: 8px;\n    margin-left: -12px;\n}\n.toolbar span {\n    margin-right: 12px;\n}\n.toolbar a {\n    color: dodgerblue;\n    cursor: pointer;\n    margin-right: 2px;\n    text-decoration: none;\n}\n\n.arrow-open:after {\n    content: '\\1f863 \\ Collapse';\n    font-style: normal;\n}\n\n.arrow-close:after {\n    content: '\\1f862 \\ Expand';\n    font-style: normal;\n}\n\n.arrow-top:after {\n    content: '\\1f861 \\ Top';\n    font-style: normal;\n}\n\npre {\n    font-size: 95%;\n    white-space: pre-wrap;       \u002F* Since CSS 2.1 *\u002F\n    white-space: -moz-pre-wrap;  \u002F* Mozilla, since 1999 *\u002F\n    white-space: -pre-wrap;      \u002F* Opera 4-6 *\u002F\n    white-space: -o-pre-wrap;    \u002F* Opera 7 *\u002F\n    word-wrap: break-word;       \u002F* Internet Explorer 5.5+ *\u002F\n}\n","controller":function (cp) {
+}},{"componentId":"components\u002Fhn_message","view":"\u003Cdiv class=\"message\"\u003E\n\n    \u003Cdiv class=\"header\"\u003E\n        \u003Cspan class=\"from\" data-ui-field=\"by\"\u003E\u003C\u002Fspan\u003E\n        \u003Cspan data-ui-field=\"time\"\u003E\u003C\u002Fspan\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cp data-ui-field=\"body\"\u003E\n\n        Loading message...\n\n    \u003C\u002Fp\u003E\n\n    \u003Cdiv class=\"toolbar\"\u003E\n        \u003Ca data-ui-field=\"replies-toggle\"\u003E\u003Ci class=\"arrow-close\"\u003E\u003C\u002Fi\u003E\u003C\u002Fa\u003E\n        \u003Cspan data-ui-field=\"replies-count\"\u003E\u003C\u002Fspan\u003E\n        \u003Ca data-ui-field=\"reply\"\u003E&#8631; Reply\u003C\u002Fa\u003E\n    \u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"replies\" class=\"replies\"\u003E\u003C\u002Fdiv\u003E\n\n    \u003Cdiv data-ui-field=\"bottom-bar\" class=\"toolbar\"\u003E\n        \u003Ca data-ui-field=\"replies-top\"\u003E\u003Ci class=\"arrow-top\"\u003E\u003C\u002Fi\u003E\u003C\u002Fa\u003E\n    \u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".header {\n    font-size: 110%;\n    margin-bottom: 8px;\n}\n\n.from {\n    font-weight: bold;\n    margin-right: 10px;\n}\n\n.replies {\n    border-left: dotted 1px rgba(0,0,0,0.2);\n}\n\n.toolbar {\n    font-size: 90%;\n    font-weight: bold;\n    text-transform: uppercase;\n    padding: 8px;\n    margin-left: -12px;\n}\n.toolbar span {\n    margin-right: 12px;\n}\n.toolbar a {\n    color: dodgerblue;\n    cursor: pointer;\n    margin-right: 2px;\n    text-decoration: none;\n}\n\n.arrow-open:after {\n    content: '\\1f863 \\ Hide';\n    font-style: normal;\n}\n\n.arrow-close:after {\n    content: '\\1f862 \\ Show';\n    font-style: normal;\n}\n\n.arrow-top:after {\n    content: '\\1f861 \\ Top';\n    font-style: normal;\n}\n\npre {\n    font-size: 95%;\n    white-space: pre-wrap;       \u002F* Since CSS 2.1 *\u002F\n    white-space: -moz-pre-wrap;  \u002F* Mozilla, since 1999 *\u002F\n    white-space: -pre-wrap;      \u002F* Opera 4-6 *\u002F\n    white-space: -o-pre-wrap;    \u002F* Opera 7 *\u002F\n    word-wrap: break-word;       \u002F* Internet Explorer 5.5+ *\u002F\n}\n","controller":function (cp) {
     'use strict';
 
     cp.create = function () {
@@ -356,6 +361,11 @@
     };
 
     function render(item) {
+        if (item.dead || item.deleted) {
+            console.log("DELETED", cp.context);
+            zuix.unload(cp.context);
+            return;
+        }
         cp.field('time').html(item.timestamp);
         cp.field('by').html(item.by);
         cp.field('body').html(item.text);

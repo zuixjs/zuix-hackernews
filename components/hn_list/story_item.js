@@ -13,6 +13,11 @@ zuix.controller(function (cp) {
     };
 
     function render(item) {
+        if (item.dead || item.deleted) {
+            console.log("DELETED", cp.context);
+            zuix.unload(cp.context);
+            return;
+        }
         cp.field('title').html(item.title);
         cp.field('user').html(item.by);
         cp.field('score').html(item.score);

@@ -30,12 +30,12 @@
 }
 
 .arrow-open:after {
-    content: '\1f863 \ Collapse';
+    content: '\1f863 \ Hide';
     font-style: normal;
 }
 
 .arrow-close:after {
-    content: '\1f862 \ Expand';
+    content: '\1f862 \ Show';
     font-style: normal;
 }
 

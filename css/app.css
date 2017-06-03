@@ -1,6 +1,7 @@
 body {
     padding-top: 72px;
-    font-family: 'Scope One', serif;
+    font-family: "Trebuchet MS", "Helvetica", sans-serif;
+    font-weight: 300;
     font-size: 16px;
     margin: 0;
     overflow-x: hidden;
@@ -95,9 +96,45 @@ footer {
     text-overflow: ellipsis;
 }
 
+.about-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right:0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    background: rgba(0,0,0,0.5);
+}
+
+.about-dialog {
+    max-width: 420px;
+    background-color: white;
+    -webkit-box-shadow: 0 0 26px 3px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    0 0 26px 3px rgba(50, 50, 50, 0.75);
+    box-shadow:         0 0 26px 3px rgba(50, 50, 50, 0.75);
+    border-radius: 24px;
+    -moz-border-radius: 24px;
+    -webkit-border-radius: 24px;
+    border: 1px solid #000000;
+    padding: 8px 24px 24px;
+    margin: 16px;
+}
+.about-dialog strong {
+    font-size: 110%;
+    font-weight: bolder;
+}
+
+footer .about {
+    color: white;
+    text-decoration: none;
+    font-size: 220%;
+}
+
 footer .list-info {
     color: white;
-    font-size: 120%;
+    font-size: 90%;
     font-weight:bold;
 }
 
@@ -111,6 +148,21 @@ footer .page-nav {
     min-width: 64px;
     vertical-align: middle;
     overflow: hidden;
+}
+
+footer .thread-info {
+    color: white;
+    font-weight:bolder;
+    font-size: 160%;
+    line-height: 48px;
+    min-height: 48px;
+    min-width: 64px;
+    vertical-align: middle;
+    overflow: hidden;
+}
+footer .thread-info a {
+    color: white;
+    text-decoration: none;
 }
 
 /* Responsive overloads */
