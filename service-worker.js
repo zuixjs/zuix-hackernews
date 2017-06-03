@@ -21,7 +21,7 @@ self.addEventListener('install', function(e) {
 });
 self.addEventListener('activate', function(e) {
     console.log('ServiceWorker', 'Activate');
-/*    e.waitUntil(
+    e.waitUntil(
         caches.keys().then(function(keyList) {
             return Promise.all(keyList.map(function(key) {
                 if (key !== cacheName) {
@@ -30,11 +30,11 @@ self.addEventListener('activate', function(e) {
                 }
             }));
         })
-    );*/
+    );
     return self.clients.claim();
 });
 self.addEventListener('fetch', function(event) {
-    console.log('ServiceWorker', 'Fetch: '+event.request.url);
+    //console.log('ServiceWorker', 'Fetch: '+event.request.url);
     event.respondWith(
         caches.match(event.request).then(function(response) {
             return response || fetch(event.request).catch(function(err) {

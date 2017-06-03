@@ -161,51 +161,55 @@
         var modelList = cp.model().itemList;
         if (modelList == null) return;
 
+        var startItem = currentPage*itemsPerPage;
+
         for (var i = 0; i < modelList.length; i++) {
 
             var dataItem = cp.model().getItem(i, modelList[i]);
             var id = dataItem.itemId;
 
-            if (typeof listItems[id] === 'undefined') {
-                // create container for the new list item
-                var container = document.createElement('div');
-                // set the component to load for this item
-                //container.innerHTML = '<div class="spinner"><div></div><div></div><div></div><div></div></div>';
-                container.setAttribute('data-ui-load', dataItem.componentId);
-                container.setAttribute('data-ui-options', setItemOptions(i, dataItem.options));
-                // TODO: the next line is a work around, otherwise element won't load - not sure if this is a bug
-                dataItem.options.lazyLoad = false;
-                // use a responsive CSS class if provided
-                if (dataItem.options.className != null) {
-                    // this class should set the min-height property
-                    container.classList.add(dataItem.options.className);
-                } else {
-                    // set a temporary height for the container (for lazy load to work properly)
-                    container.style['min-height'] = dataItem.options.height || '48px';
+            // Paging mode if currentPage > -1, otherwise full-list with scroll
+            if (i >= startItem && i < startItem+itemsPerPage || currentPage === -1) {
+                if (typeof listItems[id] === 'undefined') {
+                    // create container for the new list item
+                    var container = document.createElement('div');
+                    // set the component to load for this item
+                    //container.innerHTML = '<div class="spinner"><div></div><div></div><div></div><div></div></div>';
+                    container.setAttribute('data-ui-load', dataItem.componentId);
+                    container.setAttribute('data-ui-options', setItemOptions(i, dataItem.options));
+                    // TODO: the next line is a work around, otherwise element won't load - not sure if this is a bug
+                    dataItem.options.lazyLoad = false;
+                    // use a responsive CSS class if provided
+                    if (dataItem.options.className != null) {
+                        // this class should set the min-height property
+                        container.classList.add(dataItem.options.className);
+                    } else {
+                        // set a temporary height for the container (for lazy load to work properly)
+                        container.style['min-height'] = dataItem.options.height || '48px';
+                    }
+                    // add item container to the list-view, the component will be lazy-loaded later as needed
+                    cp.view().insert(i, container);
+                    // register a callback to know when the component is actually loaded
+                    var listener = function (itemIndex, el) {
+                        var l = function () {
+                            el.removeEventListener('component:ready', l);
+                            cp.trigger('loaded', ++loadedCount);
+                            // if all components have been loaded, then trigger 'complete' event
+                            if (itemIndex === modelList.length - 1)
+                                cp.trigger('complete');
+                        };
+                        container.addEventListener('component:ready', l);
+                    }(i, container);
+                    // keep track of already created items
+                    listItems[id] = container;
+                } else if (!dataItem.options.static) {
+                    // update existing item model's data
+                    // TODO: should check if the data in the model has changed before calling this
+                    zuix.context(listItems[id]).model(dataItem.options.model);
                 }
-                // add item container to the list-view, the component will be lazy-loaded later as needed
-                cp.view().insert(i, container);
-                // register a callback to know when the component is actually loaded
-                var listener = function (itemIndex, el) {
-                    var l = function () {
-                        el.removeEventListener('component:ready', l);
-                        cp.trigger('loaded', ++loadedCount);
-                        // if all components have been loaded, then trigger 'complete' event
-                        if (itemIndex === modelList.length-1)
-                            cp.trigger('complete');
-                    };
-                    container.addEventListener('component:ready', l);
-                }(i, container);
-                // keep track of already created items
-                listItems[id] = container;
-            } else if (!dataItem.options.static) {
-                // update existing item model's data
-                // TODO: should check if the data in the model has changed before calling this
-                zuix.context(listItems[id]).model(dataItem.options.model);
             }
 
-            // Paging mode if currentPage > -1, otherwise full-list with scroll
-            if (currentPage !== -1) {
+            if (currentPage !== -1 && typeof listItems[id] !== 'undefined') {
                 if (i < currentPage*itemsPerPage || i > ((currentPage+1)*itemsPerPage-1))
                     listItems[id].style.display = 'none';
                 else
@@ -220,7 +224,7 @@
     };
 
     function pageCount() {
-        return Math.ceil(listItems.length / itemsPerPage);
+        return Math.ceil(cp.model().itemList.length / itemsPerPage);
     }
 
     function setItemOptions(i, options){
