@@ -6,7 +6,7 @@
 zuix.controller(function (cp) {
 
     var listItems = [], itemOptions;
-    var currentPage = 0, itemsPerPage = 20, loadedCount = 0;
+    var currentPage = 0, itemsPerPage = 30, loadedCount = 0;
 
     cp.init = function () {
         cp.options().html = false;
