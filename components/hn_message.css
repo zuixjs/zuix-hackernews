@@ -30,17 +30,17 @@
 }
 
 .arrow-open:after {
-    content: '\1f863 \ Hide';
+    content: '\21e9 \ Hide';
     font-style: normal;
 }
 
 .arrow-close:after {
-    content: '\1f862 \ Show';
+    content: '\279c \ Show';
     font-style: normal;
 }
 
 .arrow-top:after {
-    content: '\1f861 \ Top';
+    content: '\21e7 \ Top';
     font-style: normal;
 }
 

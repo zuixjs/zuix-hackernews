@@ -1,6 +1,6 @@
 body {
     padding-top: 72px;
-    font-family: "Trebuchet MS", "Helvetica", sans-serif;
+    font-family: 'Scope One', serif;
     font-weight: 300;
     font-size: 16px;
     margin: 0;
@@ -19,10 +19,11 @@ header {
     -webkit-box-shadow: 0 4px 8px rgba(100, 100, 100, 0.49);
     -moz-box-shadow:    0 4px 8px rgba(100, 100, 100, 0.49);
     box-shadow:         0 4px 8px rgba(100, 100, 100, 0.49);
+    padding-left: 6px;
+    padding-right: 6px;
 }
 header h1 {
     margin: 0;
-    padding-left: 16px;
     font-weight: bold;
 }
 header a {
@@ -51,8 +52,8 @@ footer {
     -webkit-box-shadow: 0 -4px 8px rgba(100, 100, 100, 0.49);
     -moz-box-shadow:    0 -4px 8px rgba(100, 100, 100, 0.49);
     box-shadow:         0 -4px 8px rgba(100, 100, 100, 0.49);
-    padding-right: 24px;
-    padding-left: 24px;
+    padding-right: 10px;
+    padding-left: 10px;
     display: none;
 }
 
@@ -111,9 +112,9 @@ footer {
 .about-dialog {
     max-width: 420px;
     background-color: white;
-    -webkit-box-shadow: 0 0 26px 3px rgba(50, 50, 50, 0.75);
-    -moz-box-shadow:    0 0 26px 3px rgba(50, 50, 50, 0.75);
-    box-shadow:         0 0 26px 3px rgba(50, 50, 50, 0.75);
+    -webkit-box-shadow: 0 0 26px 3px rgba(50, 50, 50, 0.25);
+    -moz-box-shadow:    0 0 26px 3px rgba(50, 50, 50, 0.25);
+    box-shadow:         0 0 26px 3px rgba(50, 50, 50, 0.25);
     border-radius: 24px;
     -moz-border-radius: 24px;
     -webkit-border-radius: 24px;
@@ -129,7 +130,18 @@ footer {
 footer .about {
     color: white;
     text-decoration: none;
-    font-size: 220%;
+    text-align: center;
+    font-size: 18px;
+    height: 28px;
+    width: 28px;
+    display: block;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
+    -webkit-box-shadow: 0 0 12px 3px rgba(50, 50, 50, 0.25);
+    -moz-box-shadow:    0 0 12px 3px rgba(50, 50, 50, 0.25);
+    box-shadow:         0 0 12px 3px rgba(50, 50, 50, 0.25);
+    border: 2px solid rgba(255,255,255,0.5);
 }
 
 footer .list-info {
@@ -139,15 +151,14 @@ footer .list-info {
 }
 
 footer .page-nav {
-    cursor: pointer;
     color: white;
-    font-weight:bolder;
-    font-size: 200%;
-    line-height: 48px;
-    min-height: 48px;
-    min-width: 64px;
-    vertical-align: middle;
-    overflow: hidden;
+    min-width: 32px;
+    text-align: center;
+    font-size:180%;
+    text-decoration: none;
+}
+footer .page-count {
+    min-width: 80px;
 }
 
 footer .thread-info {
