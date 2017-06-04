@@ -20,10 +20,10 @@ var app = new (function() {
     // loading options for the hn_list component
     window.hnListOptions = {
         ready: function (hnList) {
-            hnList.callback(function (listStatus) {
+            hnList.callback(function (statusInfo) {
                 // update counter/status info in the footer
-                zuix.field('load-count').html(listStatus.itemsLoaded+' of '+listStatus.itemsCount);
-                zuix.field('page-count').html((listStatus.pagesCurrent+1)+' / '+listStatus.pagesCount);
+                zuix.field('load-count').html(statusInfo.items.loaded+' of '+statusInfo.items.count);
+                zuix.field('page-count').html((statusInfo.page.current+1)+' / '+statusInfo.page.count);
             });
         }
     };
@@ -155,13 +155,12 @@ var app = new (function() {
         return this;
     })();
 
+    // App's public methods
     this.next = function () {
-        var p = currentFeed.info();
-        location.href = '#/'+p.path+'/'+(p.pagesCurrent+1);
+        location.href = '#/'+currentFeed.source()+'/'+(currentFeed.page()+1);
     };
     this.prev = function () {
-        var p = currentFeed.info();
-        location.href = '#/'+p.path+'/'+(p.pagesCurrent-1);
+        location.href = '#/'+currentFeed.source()+'/'+(currentFeed.page()-1);
     };
     this.about = function () {
         zuix.field('about').show().get().focus();

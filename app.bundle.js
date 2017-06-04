@@ -1,53 +1,60 @@
-﻿zuix.bundle([{"componentId":"components\u002Fhn_list","view":"\u003Cdiv self=\"size-x1\" layout=\"column center-center\" class=\"list\"\u003E\n\n    \u003Cdiv data-ui-load=\"components\u002Flist_view\"\n         data-ui-field=\"list-view\"\n         self=\"size-large\"\u003E\n\n        Loading news list...\n\n    \u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".list \u003E div {\n    padding-right: 16px;\n}","controller":function (cp) {
+﻿zuix.bundle([{"componentId":"components\u002Fhn_list","view":"\u003Cdiv self=\"size-x1\" layout=\"column center-center\" class=\"list\"\u003E\n\n    \u003C!-- Example of loading a component from a remote hosting site.\n         The *list_view* component is loaded from ZUIX site.\n         When bundling the app all remote components will be\n         crunched into the `app.bundle.js` file and will then\n         be loaded from memory. --\u003E\n\n    \u003Cdiv data-ui-load=\"http:\u002F\u002Fwww.zuix.it\u002Fui\u002Fcontrols\u002Flist_view\"\n         data-ui-field=\"list-view\"\n         self=\"size-large\"\u003E\n\n        Loading news list...\n\n    \u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".list \u003E div {\n    padding-right: 16px;\n}","controller":function (cp) {
     'use strict';
 
-    var listView, statusCallback, statusInfo = {
-        itemsLoaded: 0,
-        itemsCount: 0,
-        pagesCurrent: 0,
-        pagesCount: 0
-    };
+    var listView;
+    var sourceId;
+    var currentPage = 0;
+    var updateCallback;
 
     cp.create = function () {
-        statusInfo.path = cp.view().attr('data-ui-field');
-        // get a reference to the list_view component (async)
+
+        sourceId = cp.view().attr('data-ui-field');
+        // get a reference to the list_view component once it is loaded (async)
         zuix.context(cp.field('list-view'), function(ctx){
             listView = ctx;
-            // update counters each time a item is loaded
-            listView.on('loaded', function (e, loadedCount) {
-                statusInfo.itemsLoaded = loadedCount;
-                statusCallback(statusInfo);
+            // listen and route the listView 'status' event
+            listView.on('status', function (e, status) {
+                if (updateCallback != null)
+                    updateCallback(status);
             });
-            // fetch the news list from Hacker News FireBase API
-            loadList(statusInfo.path+'stories');
+            // set items per page (from component attribute or 20 by default)
+            var ipp = cp.view().attr('data-ui-items');
+            if (ipp == null) ipp = 20;
+            listView.config({
+                listMode: 'paged',
+                itemsPerPage: parseInt(ipp)
+            });
+            // fetch the list data by invoking Hacker News FireBase API
+            loadList(sourceId+'stories');
         });
-        // public methods
-        cp.expose('info', function () {
-            return statusInfo;
+
+        // Methods exposed by hn_list component
+
+        // <hn_list_ctx>.source()
+        // returns the data source name (eg. new, top, job)
+        cp.expose('source', function () {
+            return sourceId;
         });
+
+        // <hn_list_ctx>.page([<p>])
+        // gets or sets the current listView page
         cp.expose('page', function (p) {
-            cp.view().get().scrollTop = 0;
-            if (!isNaN(p))
-                statusInfo.pagesCurrent = p;
+            if (!isNaN(p)) {
+                cp.view().get().scrollTop = 0;
+                currentPage = p;
+            }
             if (listView != null)
-                statusInfo.pagesCurrent = listView.page(p);
-            statusCallback(statusInfo);
+                currentPage = listView.page(currentPage);
+            return currentPage;
         });
-        cp.expose('next', function () {
-            cp.view().get().scrollTop = 0;
-            listView.next();
-            statusInfo.pagesCurrent = listView.page();
-            statusCallback(statusInfo);
+
+        // <hn_list_ctx>.callback(<callback_fn>)
+        // register a <callback_fn> that will get called
+        // each time a new item is loaded or page is changed
+        cp.expose('callback', function (callback) {
+            updateCallback = callback;
         });
-        cp.expose('prev', function () {
-            cp.view().get().scrollTop = 0;
-            listView.prev();
-            statusInfo.pagesCurrent = listView.page();
-            statusCallback(statusInfo);
-        });
-        cp.expose('callback', function(callback){
-            statusCallback = callback;
-        });
+
     };
 
     cp.destroy = function () {
@@ -100,56 +107,61 @@
                     }
                 }
             });
-            statusInfo.itemsCount = listData.length;
-            statusInfo.pagesCount = listView.count();
-            if (statusInfo.pagesCurrent > 0)
-                statusInfo.pagesCurrent = listView.page(statusInfo.pagesCurrent);
+            // go to current page
+            if (currentPage >= 0)
+                currentPage = listView.page(currentPage);
         });
     }
 
-}},{"componentId":"components\u002Flist_view","controller":function (cp) {
+}},{"componentId":"http:\u002F\u002Fwww.zuix.it\u002Fui\u002Fcontrols\u002Flist_view","controller":function (cp) {
 
-    var listItems = [], itemOptions;
-    var currentPage = 0, itemsPerPage = 30, loadedCount = 0;
+    // Set the list items' creation method either to be
+    // using HTML elements with data-ui-load attribute (htmlMode = true)
+    // or by using zuix.createComponent(..) (htmlMode = false)
+    var htmlMode = true;
+
+    // Set list type: [ 'full', 'paged', 'incremental' ] (default: 'full')
+    var MODE_FULL = 'full', MODE_PAGED = 'paged', MODE_INCREMENTAL = 'incremental';
+    var listMode = MODE_FULL;
+
+    // How many items per page to show/add (for 'paged' and 'incremental' modes) (default: 30)
+    var itemsPerPage = 30;
+
+    // Structure used to store component state info
+    var statusInfo = {
+        page: {
+            current: 0,
+            count: 0
+        },
+        items: {
+            loaded: 0,
+            count: 0
+        }
+    };
+
+    // Objects data persistence
+    var listItems = [];
+    var itemOptions;
 
     cp.init = function () {
         cp.options().html = false;
         cp.options().css = false;
+        // custom component options
     };
 
+    // TODO: describe the model and options used by this component
     cp.create = function () {
-        // exposed methods
-        cp.expose('page', function (page) {
-            if (page != null && page >= 0 && page < pageCount()) {
-                currentPage = parseInt(page);
-                cp.update();
-            }
-            return currentPage;
-        });
-        cp.expose('count', function () {
-            return pageCount();
-        });
-        cp.expose('next', function () {
-            if (currentPage < pageCount() - 1) {
-                currentPage++;
-                cp.update();
-            }
-            return currentPage;
-        });
-        cp.expose('prev', function () {
-            if (currentPage > 0) {
-                currentPage--;
-                cp.update();
-            }
-            return currentPage;
-        });
+        // exposed methods through this component context
+        cp.expose('config', configure);
+        cp.expose('page', setPage);
+        cp.expose('status', getStatus);
         cp.expose('more', function () {
-            currentPage++;
-            var children = cp.view().children();
-            for (var i = currentPage*itemsPerPage; i < ((currentPage+1)*itemsPerPage); i++)
-                children.eq(i).show();
+            statusInfo.page.current++;
+            cp.update();
         });
         cp.expose('clear', clear);
+        // init
+        clear();
     };
 
     cp.destroy = function () {
@@ -161,24 +173,42 @@
         var modelList = cp.model().itemList;
         if (modelList == null) return;
 
-        var startItem = currentPage*itemsPerPage;
+        statusInfo.page.count = pageCount();
+        statusInfo.items.count = modelList.length;
+
+        var startItem = statusInfo.page.current*itemsPerPage;
 
         for (var i = 0; i < modelList.length; i++) {
 
             var dataItem = cp.model().getItem(i, modelList[i]);
             var id = dataItem.itemId;
 
-            // Paging mode if currentPage > -1, otherwise full-list with scroll
-            if (i >= startItem && i < startItem+itemsPerPage || currentPage === -1) {
+            if ((listMode === MODE_FULL) ||
+                (listMode === MODE_PAGED && i >= startItem && i < startItem+itemsPerPage) ||
+                (listMode === MODE_INCREMENTAL && i < startItem+itemsPerPage)) {
                 if (typeof listItems[id] === 'undefined') {
-                    // create container for the new list item
-                    var container = document.createElement('div');
-                    // set the component to load for this item
-                    //container.innerHTML = '<div class="spinner"><div></div><div></div><div></div><div></div></div>';
-                    container.setAttribute('data-ui-load', dataItem.componentId);
-                    container.setAttribute('data-ui-options', setItemOptions(i, dataItem.options));
-                    // TODO: the next line is a work around, otherwise element won't load - not sure if this is a bug
-                    dataItem.options.lazyLoad = false;
+                    var container;
+                    if (htmlMode) {
+                        // This is the 'htmlMode' approach for creating the
+                        // list_view components. This methods is way faster than
+                        // `zuix.createComponent` since it just creates a `div` container.
+                        // Using this approach we have to wait for the 'component:ready'
+                        // event before obtaining a reference to the component context.
+                        container = document.createElement('div');
+                        // Set the component to load for this item
+                        //container.innerHTML = '<div class="spinner"><div></div><div></div><div></div><div></div></div>';
+                        container.setAttribute('data-ui-load', dataItem.componentId);
+                        container.setAttribute('data-ui-options', setItemOptions(i, dataItem.options));
+                        // TODO: the next line is a work around, otherwise element won't load - not sure if this is a bug
+                        dataItem.options.lazyLoad = false;
+                    } else {
+                        // This other method is a bit slower since the `createComponent`
+                        // method involves other extra checks.
+                        // The main advantage is that we can obtain a reference to the
+                        // component context before it is created. For very long lists,
+                        // always prefer using the `htmlMode` approach.
+                        container = zuix.createComponent(dataItem.componentId, dataItem.options).container();
+                    }
                     // use a responsive CSS class if provided
                     if (dataItem.options.className != null) {
                         // this class should set the min-height property
@@ -193,24 +223,27 @@
                     var listener = function (itemIndex, el) {
                         var l = function () {
                             el.removeEventListener('component:ready', l);
-                            cp.trigger('loaded', ++loadedCount);
+                            // trigger status update event
+                            statusInfo.items.loaded++;
+                            cp.trigger('status', statusInfo);
                             // if all components have been loaded, then trigger 'complete' event
                             if (itemIndex === modelList.length - 1)
                                 cp.trigger('complete');
                         };
                         container.addEventListener('component:ready', l);
                     }(i, container);
-                    // keep track of already created items
+                    // keep track of already allocated items
                     listItems[id] = container;
                 } else if (!dataItem.options.static) {
                     // update existing item model's data
                     // TODO: should check if the data in the model has changed before calling this
+                    // TODO: should also call the `model` method in the `zuix.context` callback
                     zuix.context(listItems[id]).model(dataItem.options.model);
                 }
             }
 
-            if (currentPage !== -1 && typeof listItems[id] !== 'undefined') {
-                if (i < currentPage*itemsPerPage || i > ((currentPage+1)*itemsPerPage-1))
+            if (typeof listItems[id] !== 'undefined') {
+                if ((listMode === MODE_PAGED && i < statusInfo.page.current * itemsPerPage) || (listMode !== MODE_FULL && i > ((statusInfo.page.current + 1) * itemsPerPage - 1)))
                     listItems[id].style.display = 'none';
                 else
                     listItems[id].style.display = '';
@@ -218,10 +251,25 @@
 
         }
 
-        // `componentize` is required to process lazy-loaded items (if any)
+        // trigger status update event
+        cp.trigger('status', statusInfo);
+
+        // `componentize` is required to process lazy-loaded items
         zuix.componentize(cp.view());
 
     };
+
+    function setPage(number) {
+        if (!isNaN(number) && number >= 0 && number < pageCount()) {
+            statusInfo.page.current = parseInt(number);
+            cp.update();
+        }
+        return statusInfo.page.current;
+    }
+
+    function getStatus() {
+        return statusInfo;
+    }
 
     function pageCount() {
         return Math.ceil(cp.model().itemList.length / itemsPerPage);
@@ -232,9 +280,17 @@
         return 'list_view_opts.'+cp.context.contextId.replace(/-/g, '_')+'.opt_'+i;
     }
 
+    function configure(options) {
+        if (options.itemsPerPage != null)
+            itemsPerPage = options.itemsPerPage;
+        if (options.listMode != null)
+            listMode = options.listMode;
+        if (options.htmlMode != null)
+            htmlMode = options.htmlMode;
+    }
+
     function clear() {
-        // clear data and cache
-        cp.view().html('');
+        // TODO: find a better solution for storing data globally (eg. add method zuix.store(....) - localStorage)
         // globally store list view item options
         window.list_view_opts = window.list_view_opts || {};
         itemOptions = window.list_view_opts[cp.context.contextId.replace(/-/g, '_')] = {};
@@ -243,7 +299,12 @@
             zuix.unload(listItems[i]);
         }
         listItems.length = 0;
-        currentPage = 0;
+        statusInfo.page.current = 0;
+        statusInfo.page.count = 0;
+        statusInfo.items.loaded = 0;
+        statusInfo.items.count = 0;
+        // clear the view
+        cp.view().html('');
     }
 }},{"componentId":"components\u002Fhn_list\u002Fstory_item","view":"\u003Cdiv class=\"number\" data-ui-field=\"number\"\u003E\u003C\u002Fdiv\u003E\n\u003Cdiv data-ui-field=\"card\" class=\"content\"\u003E\n    \u003Ch3\u003E\n        \u003Ca data-ui-field=\"title\" class=\"single-line\"\u003ELoading...\u003C\u002Fa\u003E\n    \u003C\u002Fh3\u003E\n    \u003Ca data-ui-field=\"url\" class=\"single-line\"\u003E\u003C\u002Fa\u003E\n    \u003Cdiv data-ui-field=\"description\" class=\"single-line\"\u003E\n        \u003Cspan data-ui-field=\"date\"\u003E...\u003C\u002Fspan\u003E\n        by \u003Cspan data-ui-field=\"user\"\u003E...\u003C\u002Fspan\u003E\n        \u002F \u003Cspan data-ui-field=\"score\"\u003E...\u003C\u002Fspan\u003E points\n        \u003Ca data-ui-field=\"descendants\"\u003E\u003C\u002Fa\u003E\n    \u003C\u002Fdiv\u003E\n\u003C\u002Fdiv\u003E\n","css":". {\n    border-bottom: solid 1px whitesmoke;\n    overflow: hidden;\n    position: relative;\n}\n\nh3 {\n    margin: 0;\n    font-weight: 600;\n}\nh3 \u003E a {\n    color: black;\n}\na {\n    text-decoration: none;\n}\n.number {\n    position: absolute;\n    margin: 0;\n    padding: 8px 0 0;\n    width: 48px;\n    text-align: center;\n    color: #3b5998;\n    font-size: 120%;\n    font-weight: bold;\n    animation-duration: 0.8s;\n    -webkit-animation-duration: 0.8s;\n    -moz-animation-duration: 0.8s;\n    -o-animation-duration: 0.8s;\n}\n.content {\n    padding-top: 8px;\n    padding-left: 48px;\n    animation-duration: 0.3s;\n    -webkit-animation-duration: 0.3s;\n    -moz-animation-duration: 0.3s;\n    -o-animation-duration: 0.3s;\n}\n.active {\n    background-color: rgba(100, 100, 100, 0.1);\n}","controller":function (cp) {
     'use strict';
@@ -261,7 +322,8 @@
 
     function render(item) {
         if (item.dead || item.deleted) {
-            console.log("DELETED", cp.context);
+            // This is a delete message, so there's nothing to show,
+            // we just unload/remove the component
             zuix.unload(cp.context);
             return;
         }
@@ -309,6 +371,11 @@
 
     function render(item) {
         cp.view().get().scrollTop = 0;
+        // Load data from `item` to the view's fields.
+        // This could also be done automatically
+        // by calling `cp.model(item)` method
+        // and take advantage of model-to-field mapping,
+        // but we prefer more control over it in this case.
         cp.field('title').html(item.title);
         if (item.url != null) {
             cp.field('title').attr('href', item.url);
@@ -325,20 +392,36 @@
         cp.field('reply').attr('href', 'https://news.ycombinator.com/reply?id='+item.id);
         cp.field('thread').hide();
         cp.field('loading').show();
+        // since disposing of previous list may block the UI,
+        // we delay its call to allow the loading message to be shown first
         setTimeout(function () {
             clear();
+            // list thread's messages
             zuix.$.each(item.kids, function (k, v) {
 
+                // create the message component
                 var message = zuix.createComponent('components/hn_message', {
                     lazyLoad: true,
+                    // the `ready` callback
                     ready: function (ctx) {
+                        // once the component is ready and visible we call its
+                        // `load` method to actually load the message data from firebase
                         ctx.load(v);
                     }
                 });
+                // give a min-height to the message container
+                // for better lazy-loading performance
                 message.container().style['min-height'] = '48px';
+                // append the message component container to the list
+                // at this point the component is not yet loaded
+                // it will be only loaded if the container comes
+                // into the user's screen view, then the `ready`
+                // callback registered above will be called
                 cp.field('thread').append(message.container());
 
             });
+            // after appending all messages containers we show the list's div
+            // so that zuix.componentize(...) can start lazy-loading components
             cp.field('loading').hide();
             cp.field('thread').show();
             zuix.componentize(cp.field('thread'));
@@ -346,6 +429,7 @@
     }
 
     function clear() {
+        // clear the list by disposing all message components
         var messages = cp.field('thread').children();
         for(var i = messages.length()-1; i >= 0; i--)
             zuix.unload(messages.get(i));
@@ -366,10 +450,16 @@
 
     function render(item) {
         if (item.dead || item.deleted) {
-            console.log("DELETED", cp.context);
+            // This is a delete message, so there's nothing to show,
+            // we just unload/remove the component
             zuix.unload(cp.context);
             return;
         }
+        // Load data from `item` to the view's fields.
+        // This could also be done automatically
+        // by calling `cp.model(item)` method
+        // and take advantage of model-to-field mapping,
+        // but we prefer more control over it in this case.
         cp.field('time').html(item.timestamp);
         cp.field('by').html(item.by);
         cp.field('body').html(item.text);
@@ -396,6 +486,11 @@
         } else {
             cp.field('replies-toggle').hide();
         }
+        // Create components for direct replies of this message.
+        // We are using this same component for child message.
+        // So this is some sort of components loading recursion.
+        // The recursion will only be engaged after the message
+        // comes into the user's screen's view (lazy-loading).
         zuix.$.each(item.kids, function (k, v) {
             var message = zuix.createComponent('components/hn_message', {
                 lazyLoad: true,
@@ -410,6 +505,7 @@
     }
 
     function clear() {
+        // clear the list by disposing all message components
         var messages = cp.field('replies').children();
         for(var i = messages.length()-1; i >= 0; i--)
             zuix.unload(messages.get(i));
@@ -422,6 +518,8 @@
         cp.field('replies').show();
         cp.field('bottom-bar').show();
         cp.field('replies-collapse').show('inline');
+        // we call `zuix.componentize(..)` after making the replies' div
+        // visible so that replies' components get actually loaded
         zuix.componentize(cp.field('replies'));
     }
 

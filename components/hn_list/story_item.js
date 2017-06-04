@@ -14,7 +14,8 @@ zuix.controller(function (cp) {
 
     function render(item) {
         if (item.dead || item.deleted) {
-            console.log("DELETED", cp.context);
+            // This is a delete message, so there's nothing to show,
+            // we just unload/remove the component
             zuix.unload(cp.context);
             return;
         }

@@ -1,6 +1,12 @@
 <div self="size-x1" layout="column center-center" class="list">
 
-    <div data-ui-load="components/list_view"
+    <!-- Example of loading a component from a remote hosting site.
+         The *list_view* component is loaded from ZUIX site.
+         When bundling the app all remote components will be
+         crunched into the `app.bundle.js` file and will then
+         be loaded from memory. -->
+
+    <div data-ui-load="http://www.zuix.it/ui/controls/list_view"
          data-ui-field="list-view"
          self="size-large">
 

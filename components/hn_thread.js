@@ -16,6 +16,11 @@ zuix.controller(function (cp) {
 
     function render(item) {
         cp.view().get().scrollTop = 0;
+        // Load data from `item` to the view's fields.
+        // This could also be done automatically
+        // by calling `cp.model(item)` method
+        // and take advantage of model-to-field mapping,
+        // but we prefer more control over it in this case.
         cp.field('title').html(item.title);
         if (item.url != null) {
             cp.field('title').attr('href', item.url);
@@ -32,20 +37,36 @@ zuix.controller(function (cp) {
         cp.field('reply').attr('href', 'https://news.ycombinator.com/reply?id='+item.id);
         cp.field('thread').hide();
         cp.field('loading').show();
+        // since disposing of previous list may block the UI,
+        // we delay its call to allow the loading message to be shown first
         setTimeout(function () {
             clear();
+            // list thread's messages
             zuix.$.each(item.kids, function (k, v) {
 
+                // create the message component
                 var message = zuix.createComponent('components/hn_message', {
                     lazyLoad: true,
+                    // the `ready` callback
                     ready: function (ctx) {
+                        // once the component is ready and visible we call its
+                        // `load` method to actually load the message data from firebase
                         ctx.load(v);
                     }
                 });
+                // give a min-height to the message container
+                // for better lazy-loading performance
                 message.container().style['min-height'] = '48px';
+                // append the message component container to the list
+                // at this point the component is not yet loaded
+                // it will be only loaded if the container comes
+                // into the user's screen view, then the `ready`
+                // callback registered above will be called
                 cp.field('thread').append(message.container());
 
             });
+            // after appending all messages containers we show the list's div
+            // so that zuix.componentize(...) can start lazy-loading components
             cp.field('loading').hide();
             cp.field('thread').show();
             zuix.componentize(cp.field('thread'));
@@ -53,6 +74,7 @@ zuix.controller(function (cp) {
     }
 
     function clear() {
+        // clear the list by disposing all message components
         var messages = cp.field('thread').children();
         for(var i = messages.length()-1; i >= 0; i--)
             zuix.unload(messages.get(i));

@@ -1,53 +1,60 @@
 zuix.controller(function (cp) {
     'use strict';
 
-    var listView, statusCallback, statusInfo = {
-        itemsLoaded: 0,
-        itemsCount: 0,
-        pagesCurrent: 0,
-        pagesCount: 0
-    };
+    var listView;
+    var sourceId;
+    var currentPage = 0;
+    var updateCallback;
 
     cp.create = function () {
-        statusInfo.path = cp.view().attr('data-ui-field');
-        // get a reference to the list_view component (async)
+
+        sourceId = cp.view().attr('data-ui-field');
+        // get a reference to the list_view component once it is loaded (async)
         zuix.context(cp.field('list-view'), function(ctx){
             listView = ctx;
-            // update counters each time a item is loaded
-            listView.on('loaded', function (e, loadedCount) {
-                statusInfo.itemsLoaded = loadedCount;
-                statusCallback(statusInfo);
+            // listen and route the listView 'status' event
+            listView.on('status', function (e, status) {
+                if (updateCallback != null)
+                    updateCallback(status);
             });
-            // fetch the news list from Hacker News FireBase API
-            loadList(statusInfo.path+'stories');
+            // set items per page (from component attribute or 20 by default)
+            var ipp = cp.view().attr('data-ui-items');
+            if (ipp == null) ipp = 20;
+            listView.config({
+                listMode: 'paged',
+                itemsPerPage: parseInt(ipp)
+            });
+            // fetch the list data by invoking Hacker News FireBase API
+            loadList(sourceId+'stories');
         });
-        // public methods
-        cp.expose('info', function () {
-            return statusInfo;
+
+        // Methods exposed by hn_list component
+
+        // <hn_list_ctx>.source()
+        // returns the data source name (eg. new, top, job)
+        cp.expose('source', function () {
+            return sourceId;
         });
+
+        // <hn_list_ctx>.page([<p>])
+        // gets or sets the current listView page
         cp.expose('page', function (p) {
-            cp.view().get().scrollTop = 0;
-            if (!isNaN(p))
-                statusInfo.pagesCurrent = p;
+            if (!isNaN(p)) {
+                cp.view().get().scrollTop = 0;
+                currentPage = p;
+            }
             if (listView != null)
-                statusInfo.pagesCurrent = listView.page(p);
-            statusCallback(statusInfo);
+                currentPage = listView.page(currentPage);
+            return currentPage;
         });
-        cp.expose('next', function () {
-            cp.view().get().scrollTop = 0;
-            listView.next();
-            statusInfo.pagesCurrent = listView.page();
-            statusCallback(statusInfo);
+
+        // <hn_list_ctx>.callback(<callback_fn>)
+        // register a <callback_fn> that will get called
+        // each time a new item is loaded or page is changed
+        cp.expose('callback', function (callback) {
+            updateCallback = callback;
         });
-        cp.expose('prev', function () {
-            cp.view().get().scrollTop = 0;
-            listView.prev();
-            statusInfo.pagesCurrent = listView.page();
-            statusCallback(statusInfo);
-        });
-        cp.expose('callback', function(callback){
-            statusCallback = callback;
-        });
+
     };
 
     cp.destroy = function () {
@@ -100,10 +107,9 @@ zuix.controller(function (cp) {
                     }
                 }
             });
-            statusInfo.itemsCount = listData.length;
-            statusInfo.pagesCount = listView.count();
-            if (statusInfo.pagesCurrent > 0)
-                statusInfo.pagesCurrent = listView.page(statusInfo.pagesCurrent);
+            // go to current page
+            if (currentPage >= 0)
+                currentPage = listView.page(currentPage);
         });
     }
 
