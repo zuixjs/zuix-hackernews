@@ -1,4 +1,4 @@
-var cacheName = 'zuix-hn-cache-v1';
+var cacheName = 'zuix-hn-cache-v2';
 var filesToCache = [
     './',
     './index.html',
@@ -7,7 +7,8 @@ var filesToCache = [
     './app.bundle.js',
     './css/app.css',
     './css/animate.min.css',
-    './css/flex-layout-attribute.min.css'
+    './css/flex-layout-attribute.min.css',
+    'https://fonts.googleapis.com/css?family=Scope+One'
 ];
 
 self.addEventListener('install', function(e) {
