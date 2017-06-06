@@ -43,6 +43,7 @@ var app = new (function() {
                 zuix.field('load-count').html(statusInfo.items.loaded+' of '+statusInfo.items.count);
                 zuix.field('page-count').html((statusInfo.page.current+1)+' / '+statusInfo.page.count);
             });
+            hnList.view().addEventListener('scroll', listScrollHandler);
         }
     };
 
@@ -64,14 +65,21 @@ var app = new (function() {
     }).on('keydown', function () {
         this.hide();
     }).hide();
-    // Set lazy loading and show the current view
-    zuix.lazyLoad(true, 1.5);
+    // Show footer when FAB is clicked
+    zuix.$.find('.page-button').on('click', function () {
+        showFooter();
+    }).hide();
 
+    // Set lazy loading mode (load components ahead by 150% of screen)
+    zuix.lazyLoad(true, 1.5);
 
     // App startup complete: hide splash and show the main screen
     showCurrentView();
     zuix.field('app-splash').hide();
     zuix.field('app-screen').css('display', '');
+
+
+    // -----------------------
 
 
     // parse URL hash in the form #/<page>/<args>
@@ -101,8 +109,8 @@ var app = new (function() {
             .addClass('tab-hidden');
 
         if (pr.page === 'comments') {
-            zuix.field('page-info').hide();
-            zuix.field('thread-info').show();
+            // show message thread header
+            showMessageNav();
             // show comments thread
             var comments = zuix.field('comments')
                 .removeClass('tab-hidden')
@@ -112,13 +120,15 @@ var app = new (function() {
                     // TODO: update footer data
                     zuix.field('thread-count')
                         .html(item.comments);
+                    zuix.field('thread-title')
+                        .html(item.title);
                 });
             });
             // run componentize to lazy-load elements
             zuix.componentize(comments);
         } else {
-            zuix.field('page-info').show();
-            zuix.field('thread-info').hide();
+            // show feeds' list header
+            showListNav();
             // show the selected hacker news feed
             var hn_current = zuix.field(pr.page)
                 .removeClass('tab-hidden')
@@ -132,6 +142,66 @@ var app = new (function() {
             zuix.componentize(hn_current);
         }
     }
+
+    var fullScreen = false;
+    var scrollInfo = {
+        lastTop: 0,
+        timestamp: 0,
+        timeout: null
+    };
+
+    function listScrollHandler(e) {
+        var now = new Date().getTime();
+        // Footer hide logic
+        if (now - scrollInfo.timestamp > 200) {
+            scrollInfo.timestamp = now;
+            if (!fullScreen) {
+                var dy = Math.abs(e.target.scrollTop - scrollInfo.lastTop);
+                if (dy > 20) {
+                    hideFooter();
+                    scrollInfo.lastTop = e.target.scrollTop;
+                }
+            }
+        }
+        // Footer reveal logic
+        if (scrollInfo.timeout != null)
+            clearTimeout(scrollInfo.timeout);
+        var endScroll = e.target.firstChild.offsetHeight-e.target.offsetHeight-e.target.scrollTop;
+        if ((endScroll <= -40 || e.target.scrollTop === 0) && fullScreen) {
+            scrollInfo.timeout = setTimeout(function () {
+                    showFooter();
+            }, 100);
+        }
+    }
+
+    function showListNav() {
+        // hide message thread header and show feed's list header
+        zuix.field('header-nav').show();
+        zuix.field('thread-info').hide();
+        showFooter();
+    }
+
+    function showMessageNav() {
+        // hide feeds' list header and show message thread header
+        zuix.field('header-nav').hide();
+        zuix.field('thread-info').show();
+        // hide list paging footer
+        hideFooter(); zuix.$.find('.page-button').hide();
+    }
+
+    function hideFooter () {
+        fullScreen = true;
+        zuix.$('footer').addClass('animated fadeOutDown');
+        zuix.$.find('.page-button').show();
+    }
+
+    function showFooter () {
+        fullScreen = false;
+        zuix.$('footer').removeClass('animated fadeOutDown')
+            .addClass('animated fadeInUp');
+        zuix.$.find('.page-button').hide();
+    }
+
 
     // HN FireBase API small utility class with item caching
     window.firebase = new (function() {

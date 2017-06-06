@@ -14,7 +14,8 @@
 <div data-ui-field="app-screen" style="display: none">
 
     <header>
-        <div layout="row center-spread">
+
+        <div data-ui-field="header-nav" layout="row center-spread" class="animated fadeIn">
             <h1><a title="Made with ZUIX!" href="https://github.com/g-labs-sw/zuix-hackernews">Hacker News</a></h1>
             <div class="menu" self="center">
                 <a href="#/top">top</a>
@@ -24,6 +25,17 @@
                 <a href="#/job">jobs</a>
             </div>
         </div>
+
+        <div data-ui-field="thread-info" layout="row center-stretch" class="animated fadeIn">
+            <div class="thread-info">
+                <a href="javascript:history.back()">&#x25c4;</a>
+            </div>
+            <div self="size-1of2" align="center"><h5 data-ui-field="thread-title" class="thread-title single-line"></h5></div>
+            <div class="thread-info" align="right">
+                <span data-ui-field="thread-count" class="single-line"></span>
+            </div>
+        </div>
+
     </header>
 
     <main>
@@ -72,7 +84,7 @@
 
     <footer layout="column center-center">
 
-        <div data-ui-field="page-info" self="size-xlarge" layout="row center-spread">
+        <div data-ui-field="page-info" layout="row center-spread">
 
             <div>
                 <a href="javascript:app.about()" class="about">i</a>
@@ -92,16 +104,9 @@
 
         </div>
 
-        <div data-ui-field="thread-info" self="size-xlarge" layout="row center-spread">
-            <div self="size-x1" class="thread-info">
-                <a href="javascript:history.back()">&#x21b6; back</a>
-            </div>
-            <div self="right" class="thread-info">
-                <span data-ui-field="thread-count" class="single-line"></span>
-            </div>
-        </div>
-
     </footer>
+
+    <div class="page-button animated fadeInUpBig">&#x21c6;</div>
 
     <!-- About Dialog -->
     <div data-ui-field="about"

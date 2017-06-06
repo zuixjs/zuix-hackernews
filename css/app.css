@@ -64,7 +64,8 @@ footer {
 
 .scrollable {
     position: absolute;
-    top: 64px; left: 0; right: 0; bottom: 64px;
+    top: 64px; left: 0; right: 0; bottom: 0;
+    padding-bottom: 64px;
     overflow-y: auto;
 }
 
@@ -83,6 +84,26 @@ footer {
 
 .list-item {
     min-height: 85px;
+}
+
+.page-button {
+    position: fixed;
+    right:16px;
+    bottom:16px;
+    height: 48px;
+    width: 48px;
+    background-color: #1b6ab9;
+    border-radius: 24px;
+    -webkit-border-radius: 24px;
+    -moz-border-radius: 24px;
+    -webkit-box-shadow: 0 0 12px 4px rgba(50, 50, 50, 0.25);
+    -moz-box-shadow:    0 0 12px 4px rgba(50, 50, 50, 0.25);
+    box-shadow:         0 0 12px 4px rgba(50, 50, 50, 0.25);
+    text-align: center;
+    vertical-align: middle;
+    line-height: 48px;
+    color: white;
+    font-size: 160%;
 }
 
 .message {
@@ -108,6 +129,23 @@ footer {
     height: 100vh;
     z-index: 100;
     background: rgba(0,0,0,0.5);
+}
+
+header .thread-title {
+    color: white;
+    font-weight:bolder;
+    font-size: 160%;
+}
+header .thread-info {
+    color: white;
+    font-size: 110%;
+    padding-right:16px;
+}
+header .thread-info a {
+    color: white;
+    text-decoration: none;
+    padding-left: 16px;
+    padding-right: 16px;
 }
 
 footer .about {
@@ -139,25 +177,13 @@ footer .page-nav {
     text-align: center;
     font-size:180%;
     text-decoration: none;
+    padding-left:16px;
+    padding-right:16px;
 }
 footer .page-count {
     min-width: 80px;
 }
 
-footer .thread-info {
-    color: white;
-    font-weight:bolder;
-    font-size: 160%;
-    line-height: 48px;
-    min-height: 48px;
-    min-width: 64px;
-    vertical-align: middle;
-    overflow: hidden;
-}
-footer .thread-info a {
-    color: white;
-    text-decoration: none;
-}
 
 /* Responsive overloads */
 
