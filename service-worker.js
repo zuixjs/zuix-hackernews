@@ -19,48 +19,48 @@ importScripts('workbox-sw.prod.v1.0.1.js');
  */
 const fileManifest = [
   {
-    "url": "/node_modules/zuix-dist/js/zuix.min.js",
+    "url": "./node_modules/zuix-dist/js/zuix.min.js",
     "revision": "a8af4bd5b2f79fc50fb884c28705da61"
   },
   {
-    "url": "/node_modules/zuix-dist/js/zuix.min.js.map",
+    "url": "./node_modules/zuix-dist/js/zuix.min.js.map",
     "revision": "34cb0008eab42ec27e50efb018aec091"
   },
   {
-    "url": "/img/android-chrome-144x144.png",
+    "url": "./img/android-chrome-144x144.png",
     "revision": "c878037e9100058800676eb5e350f26a"
   },
   {
-    "url": "/img/android-chrome-192x192.png",
+    "url": "./img/android-chrome-192x192.png",
     "revision": "4ba2b7ea5f8cf255b6d1dda8be6ccdc9"
   },
   {
-    "url": "/img/apple-touch-icon-120x120.png",
+    "url": "./img/apple-touch-icon-120x120.png",
     "revision": "d81da58f45219409d0b08aa6e4ebc0e2"
   },
   {
-    "url": "/img/apple-touch-icon-152x152.png",
+    "url": "./img/apple-touch-icon-152x152.png",
     "revision": "155b2f9f75aea120bfa154e4108ca11f"
   },
   {
-    "url": "/img/splashscreen-icon-384x384.png",
+    "url": "./img/splashscreen-icon-384x384.png",
     "revision": "817f4d3e8fd26a9f2701bba041597d98"
   },
   {
-    "url": "/img/splashscreen-icon-512x512.png",
+    "url": "./img/splashscreen-icon-512x512.png",
     "revision": "2865338f10638bacad8eb0464ed2e548"
   },
   {
-    "url": "/js/app.js",
-    "revision": "14f638b81e1b83596ce26f070e7c39ad"
+    "url": "./js/app.js",
+    "revision": "ec878d403f42e6e4c83d8e300adb2c54"
   },
   {
-    "url": "/app.bundle.js",
-    "revision": "8a11339d2cc430e301c60eba0ef44154"
+    "url": "./app.bundle.js",
+    "revision": "536e537db379594058eacc70f4263ce5"
   },
   {
-    "url": "/index.html",
-    "revision": "c30c1380fb8e4fe073b00ab257c6e9df"
+    "url": "./index.html",
+    "revision": "e83999e8f3e5b685becb827f8ae69311"
   }
 ];
 
