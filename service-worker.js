@@ -1,60 +1,84 @@
-var cacheName = 'zuix-hn-cache-v2';
-var filesToCache = [
-    './',
-    './index.html',
-    './js/app.js',
-    './js/moment.min.js',
-    './app.bundle.js',
-    './css/app.css',
-    './css/animate.min.css',
-    './css/flex-layout-attribute.min.css',
-    'https://fonts.googleapis.com/css?family=Scope+One'
+importScripts('workbox-sw.prod.v1.0.1.js');
+
+/**
+ * DO NOT EDIT THE FILE MANIFEST ENTRY
+ *
+ * The method precache() does the following:
+ * 1. Cache URLs in the manifest to a local cache.
+ * 2. When a network request is made for any of these URLs the response
+ *    will ALWAYS comes from the cache, NEVER the network.
+ * 3. When the service worker changes ONLY assets with a revision change are
+ *    updated, old cache entries are left as is.
+ *
+ * By changing the file manifest manually, your users may end up not receiving
+ * new versions of files because the revision hasn't changed.
+ *
+ * Please use workbox-build or some other tool / approach to generate the file
+ * manifest which accounts for changes to local files and update the revision
+ * accordingly.
+ */
+const fileManifest = [
+  {
+    "url": "/css/animate.min.css",
+    "revision": "69a5232d75efb4ca2cb8fa0eb68f8c1a"
+  },
+  {
+    "url": "/css/app.css",
+    "revision": "bb17d7fd79a5fa34a2de4fd774d2599d"
+  },
+  {
+    "url": "/css/flex-layout-attribute.min.css",
+    "revision": "c55488315343d9afb4d13ebf9cc8f97b"
+  },
+  {
+    "url": "/img/android-chrome-144x144.png",
+    "revision": "14fd6e755642b3d0a95cf1fc39f8bda4"
+  },
+  {
+    "url": "/img/android-chrome-192x192.png",
+    "revision": "27672b194be4ac949d90e3f71381d0a5"
+  },
+  {
+    "url": "/img/apple-touch-icon-120x120.png",
+    "revision": "df472c5a362a7017ccb939a01508f6cb"
+  },
+  {
+    "url": "/img/apple-touch-icon-152x152.png",
+    "revision": "9258c097eaa2981d78b699c8fca21722"
+  },
+  {
+    "url": "/img/splashscreen-icon-384x384.png",
+    "revision": "b60a097bd7c608e1c59b66ee055885e6"
+  },
+  {
+    "url": "/img/splashscreen-icon-512x512.png",
+    "revision": "6e8071db09c4e72d5dd84662a82e8cd0"
+  },
+  {
+    "url": "/js/app.js",
+    "revision": "534fa810dbacdef231ea6d377c020c29"
+  },
+  {
+    "url": "/js/moment.min.js",
+    "revision": "aeb7908241d9f6d5a45e504cc4f2ec15"
+  },
+  {
+    "url": "/node_modules/zuix-dist/js/zuix.min.js",
+    "revision": "b40eb5ecbb59cc146cd2531690450ac8"
+  },
+  {
+    "url": "/node_modules/zuix-dist/js/zuix.min.js.map",
+    "revision": "414fe4d29587a9540dfb84e05eab7d73"
+  },
+  {
+    "url": "/app.bundle.js",
+    "revision": "f10a10a2659741257b2ccac04ce931ab"
+  },
+  {
+    "url": "/index.html",
+    "revision": "e45cb519e8e39288e348c628ace1b9e1"
+  }
 ];
 
-self.addEventListener('install', function(e) {
-    console.log('ServiceWorker', 'Install');
-    e.waitUntil(
-        caches.open(cacheName).then(function(cache) {
-            console.log('ServiceWorker', 'Caching app shell');
-            return cache.addAll(filesToCache);
-        })
-    );
-});
-self.addEventListener('activate', function(e) {
-    console.log('ServiceWorker', 'Activate');
-    e.waitUntil(
-        caches.keys().then(function(keyList) {
-            return Promise.all(keyList.map(function(key) {
-                if (key !== cacheName) {
-                    console.log('[ServiceWorker] Removing old cache', key);
-                    return caches.delete(key);
-                }
-            }));
-        })
-    );
-    return self.clients.claim();
-});
-self.addEventListener('fetch', function(event) {
-    //console.log('ServiceWorker', 'Fetch: '+event.request.url);
-    event.respondWith(
-        caches.match(event.request).then(function(response) {
-            return response || fetch(event.request).catch(function(err) {
-                    console.log('ServiceWorker', 'Fetch Error', err);
-                    var status = {
-                        status: 200,
-                        statusText: "OK",
-                        headers: {'Content-Type': 'text/plain'}
-                    };
-                    return new Response(JSON.stringify({
-                        "by":"network",
-                        "descendants":0,
-                        "id":0,
-                        "score":0,
-                        "time":Math.round(new Date().getTime()/1000),
-                        "title":"Network error",
-                        "type":"story"
-                    }), status);
-                });
-        })
-    )
-});
+const workboxSW = new self.WorkboxSW();
+workboxSW.precache(fileManifest);

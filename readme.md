@@ -17,6 +17,12 @@ npm install
 npm run start
 ```
 
+#### Building
+
+```shell
+npm run build
+```
+
 If you change components' source code, remember to comment the `app.bundle.js`
 file inclusion in the `index.html` file otherwise old components will be loaded from the
 bundle. For more information about *bundling* see the ZUIX docs.

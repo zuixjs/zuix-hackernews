@@ -110,13 +110,7 @@ var app = new (function() {
 
     // HN FireBase API small utility class with item caching
     window.firebase = new (function() {
-        var cache = {};
         function load(id, callback) {
-            // Pick data from cache if exists
-            if (cache[id] != null) {
-                callback(cache[id]);
-                return;
-            }
             // Fetch item data from remote service
             zuix.$.ajax({
                 url: 'https://hacker-news.firebaseio.com/v0/item/' + id + '.json',
@@ -135,7 +129,6 @@ var app = new (function() {
                         item.comments = item.descendants + ' comment';
                         if (item.descendants > 1) item.comments += 's';
                     }
-                    cache[id] = item;
                     callback(item);
                 }
             });

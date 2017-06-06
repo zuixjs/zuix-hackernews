@@ -1,4 +1,4 @@
-﻿zuix.bundle([{"componentId":"components\u002Fhn_list","view":"\u003Cdiv self=\"size-x1\" layout=\"column center-center\" class=\"list\"\u003E\n\n    \u003C!-- Example of loading a component from a remote hosting site.\n         The *list_view* component is loaded from ZUIX site.\n         When bundling the app all remote components will be\n         crunched into the `app.bundle.js` file and will then\n         be loaded from memory. --\u003E\n\n    \u003Cdiv data-ui-load=\"http:\u002F\u002Fwww.zuix.it\u002Fui\u002Fcontrols\u002Flist_view\"\n         data-ui-field=\"list-view\"\n         self=\"size-large\"\u003E\n\n        Loading news list...\n\n    \u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".list \u003E div {\n    padding-right: 16px;\n}","controller":function (cp) {
+﻿zuix.bundle([{"componentId":"components\u002Fhn_list","view":"\u003Cdiv self=\"size-x1\" layout=\"column center-center\" class=\"list\"\u003E\n\n    \u003C!-- Example of loading a component from a remote hosting site.\n         The *list_view* component is loaded from ZUIX site.\n         When bundling the app all remote components will be\n         crunched into the `app.bundle.js` file and will then\n         be loaded from memory. --\u003E\n\n    \u003Cdiv data-ui-load=\"https:\u002F\u002Fgenielabs.github.io\u002Fzuix\u002Fui\u002Fcontrols\u002Flist_view\"\n         data-ui-field=\"list-view\"\n         self=\"size-large\"\u003E\n\n        Loading news list...\n\n    \u003C\u002Fdiv\u003E\n\n\u003C\u002Fdiv\u003E\n","css":".list \u003E div {\n    padding-right: 16px;\n}","controller":function (cp) {
     'use strict';
 
     var listView;
@@ -113,7 +113,7 @@
         });
     }
 
-}},{"componentId":"http:\u002F\u002Fwww.zuix.it\u002Fui\u002Fcontrols\u002Flist_view","controller":function (cp) {
+}},{"componentId":"https:\u002F\u002Fgenielabs.github.io\u002Fzuix\u002Fui\u002Fcontrols\u002Flist_view","controller":function (cp) {
 
     // Set the list items' creation method either to be
     // using HTML elements with data-ui-load attribute (htmlMode = true)
