@@ -1,3 +1,6 @@
+.list {
+    padding-bottom: 64px;
+}
 .list > div {
     padding-right: 16px;
 }

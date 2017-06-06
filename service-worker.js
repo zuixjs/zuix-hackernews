@@ -52,15 +52,15 @@ const fileManifest = [
   },
   {
     "url": "./js/app.js",
-    "revision": "ec878d403f42e6e4c83d8e300adb2c54"
+    "revision": "bfa271437f282158ea6f01507930665b"
   },
   {
     "url": "./app.bundle.js",
-    "revision": "536e537db379594058eacc70f4263ce5"
+    "revision": "c283718cf39ead16750c4a90d6c0fe47"
   },
   {
     "url": "./index.html",
-    "revision": "e83999e8f3e5b685becb827f8ae69311"
+    "revision": "e20ac590f0c3a35a09b6e67e8b45e254"
   }
 ];
 

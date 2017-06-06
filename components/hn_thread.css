@@ -26,6 +26,14 @@ a[data-ui-field="title"] {
     margin-bottom: 8px;
 }
 
+.back-btn {
+    font-size: 160%;
+    color: black;
+    text-decoration: none;
+    padding: 16px;
+    margin: 16px;
+}
+
 div[data-ui-field="thread"] {
    overflow-x: hidden;
 }

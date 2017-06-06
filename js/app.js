@@ -167,7 +167,7 @@ var app = new (function() {
         if (scrollInfo.timeout != null)
             clearTimeout(scrollInfo.timeout);
         var endScroll = e.target.firstChild.offsetHeight-e.target.offsetHeight-e.target.scrollTop;
-        if ((endScroll <= -40 || e.target.scrollTop === 0) && fullScreen) {
+        if ((endScroll <= 0 || e.target.scrollTop === 0) && fullScreen) {
             scrollInfo.timeout = setTimeout(function () {
                     showFooter();
             }, 100);
