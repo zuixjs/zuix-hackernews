@@ -8,6 +8,24 @@
 var app = new (function() {
     'use strict';
 
+    /**
+     * The advantage of loading resources with `using` is that these can
+     * then be crunched into a single *app.bundle.js* file by using
+     * the *zuix-bundler*.
+     * Another advantage is that applying this method inside a component
+     * can make the component reusable across applications without worrying
+     * about dependencies it might requires because it will be loaded
+     * on-demand by the *zuix.using* method.
+     */
+    // Main App CSS
+    zuix.using('style', 'css/app.css');
+    // Animate CSS and Flex Layout Attribute
+    //zuix.using('style', 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css');
+    zuix.using('style', 'css/animate.min.css'); // (<-- this is a minimal build)
+    zuix.using('style', 'https://cdnjs.cloudflare.com/ajax/libs/flex-layout-attribute/1.0.3/css/flex-layout-attribute.min.css');
+    // Google 'Scope One' Fonts
+    zuix.using('style', 'https://fonts.googleapis.com/css?family=Scope+One');
+
     var currentFeed = null;
 
     // setup service worker
@@ -48,7 +66,13 @@ var app = new (function() {
     }).hide();
     // Set lazy loading and show the current view
     zuix.lazyLoad(true, 1.5);
+
+
+    // App startup complete: hide splash and show the main screen
     showCurrentView();
+    zuix.field('app-splash').hide();
+    zuix.field('app-screen').css('display', '');
+
 
     // parse URL hash in the form #/<page>/<args>
     function parseUrlPath(hash) {
@@ -90,6 +114,8 @@ var app = new (function() {
                         .html(item.comments);
                 });
             });
+            // run componentize to lazy-load elements
+            zuix.componentize(comments);
         } else {
             zuix.field('page-info').show();
             zuix.field('thread-info').hide();
@@ -102,14 +128,17 @@ var app = new (function() {
                 currentFeed = ctx;
                 ctx.page(parseInt(pr.args));
             });
+            // run componentize to lazy-load elements
+            zuix.componentize(hn_current);
         }
-
-        // run componentize to lazy-load elements
-        zuix.componentize(hn_current);
     }
 
     // HN FireBase API small utility class with item caching
     window.firebase = new (function() {
+
+        // this class requires Moment.JS library
+        zuix.using('script', 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js');
+
         function load(id, callback) {
             // Fetch item data from remote service
             zuix.$.ajax({
@@ -142,10 +171,12 @@ var app = new (function() {
                 }
             });
         }
+
         // public methods
         this.loadItem = load;
         this.loadList = list;
         return this;
+
     })();
 
     // App's public methods

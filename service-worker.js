@@ -19,64 +19,48 @@ importScripts('workbox-sw.prod.v1.0.1.js');
  */
 const fileManifest = [
   {
-    "url": "/css/animate.min.css",
-    "revision": "69a5232d75efb4ca2cb8fa0eb68f8c1a"
-  },
-  {
-    "url": "/css/app.css",
-    "revision": "bb17d7fd79a5fa34a2de4fd774d2599d"
-  },
-  {
-    "url": "/css/flex-layout-attribute.min.css",
-    "revision": "c55488315343d9afb4d13ebf9cc8f97b"
-  },
-  {
-    "url": "/img/android-chrome-144x144.png",
-    "revision": "14fd6e755642b3d0a95cf1fc39f8bda4"
-  },
-  {
-    "url": "/img/android-chrome-192x192.png",
-    "revision": "27672b194be4ac949d90e3f71381d0a5"
-  },
-  {
-    "url": "/img/apple-touch-icon-120x120.png",
-    "revision": "df472c5a362a7017ccb939a01508f6cb"
-  },
-  {
-    "url": "/img/apple-touch-icon-152x152.png",
-    "revision": "9258c097eaa2981d78b699c8fca21722"
-  },
-  {
-    "url": "/img/splashscreen-icon-384x384.png",
-    "revision": "b60a097bd7c608e1c59b66ee055885e6"
-  },
-  {
-    "url": "/img/splashscreen-icon-512x512.png",
-    "revision": "6e8071db09c4e72d5dd84662a82e8cd0"
-  },
-  {
-    "url": "/js/app.js",
-    "revision": "534fa810dbacdef231ea6d377c020c29"
-  },
-  {
-    "url": "/js/moment.min.js",
-    "revision": "aeb7908241d9f6d5a45e504cc4f2ec15"
-  },
-  {
     "url": "/node_modules/zuix-dist/js/zuix.min.js",
-    "revision": "b40eb5ecbb59cc146cd2531690450ac8"
+    "revision": "a8af4bd5b2f79fc50fb884c28705da61"
   },
   {
     "url": "/node_modules/zuix-dist/js/zuix.min.js.map",
-    "revision": "414fe4d29587a9540dfb84e05eab7d73"
+    "revision": "34cb0008eab42ec27e50efb018aec091"
+  },
+  {
+    "url": "/img/android-chrome-144x144.png",
+    "revision": "c878037e9100058800676eb5e350f26a"
+  },
+  {
+    "url": "/img/android-chrome-192x192.png",
+    "revision": "4ba2b7ea5f8cf255b6d1dda8be6ccdc9"
+  },
+  {
+    "url": "/img/apple-touch-icon-120x120.png",
+    "revision": "d81da58f45219409d0b08aa6e4ebc0e2"
+  },
+  {
+    "url": "/img/apple-touch-icon-152x152.png",
+    "revision": "155b2f9f75aea120bfa154e4108ca11f"
+  },
+  {
+    "url": "/img/splashscreen-icon-384x384.png",
+    "revision": "817f4d3e8fd26a9f2701bba041597d98"
+  },
+  {
+    "url": "/img/splashscreen-icon-512x512.png",
+    "revision": "2865338f10638bacad8eb0464ed2e548"
+  },
+  {
+    "url": "/js/app.js",
+    "revision": "14f638b81e1b83596ce26f070e7c39ad"
   },
   {
     "url": "/app.bundle.js",
-    "revision": "f10a10a2659741257b2ccac04ce931ab"
+    "revision": "8a11339d2cc430e301c60eba0ef44154"
   },
   {
     "url": "/index.html",
-    "revision": "e45cb519e8e39288e348c628ace1b9e1"
+    "revision": "c30c1380fb8e4fe073b00ab257c6e9df"
   }
 ];
 
