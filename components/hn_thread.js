@@ -70,7 +70,7 @@ zuix.controller(function (cp) {
             cp.field('loading').hide();
             cp.field('thread').show();
             zuix.componentize(cp.field('thread'));
-        }, 100);
+        }, 300);
     }
 
     function clear() {

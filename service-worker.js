@@ -56,7 +56,7 @@ const fileManifest = [
   },
   {
     "url": "./app.bundle.js",
-    "revision": "16b3af94a2e73557914bb69949e48164"
+    "revision": "6ddf06becceaf93bd9de87a73d29f0a4"
   },
   {
     "url": "./index.html",
