@@ -147,14 +147,13 @@ header .thread-info a {
     padding-right: 16px;
 }
 
-footer .about {
+footer .about-btn {
     color: white;
     text-decoration: none;
     text-align: center;
     font-size: 18px;
     height: 28px;
     width: 28px;
-    display: block;
     border-radius: 14px;
     -webkit-border-radius: 14px;
     -moz-border-radius: 14px;
@@ -162,6 +161,8 @@ footer .about {
     -moz-box-shadow:    0 0 12px 3px rgba(50, 50, 50, 0.25);
     box-shadow:         0 0 12px 3px rgba(50, 50, 50, 0.25);
     border: 2px solid rgba(255,255,255,0.5);
+    display: block;
+    margin-left: 8px;
 }
 
 footer .list-info {

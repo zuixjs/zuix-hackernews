@@ -5,7 +5,8 @@
     "build": "workbox-cli generate:sw"
   },
   "dependencies": {
-    "zuix-dist": "^0.4.9-12"
+    "moment-mini": "^2.18.1",
+    "zuix-dist": "^0.4.9-13"
   },
   "devDependencies": {
     "http-server": "^0.9.0",

@@ -43,8 +43,11 @@ zuix.controller(function (cp) {
                 cp.view().get().scrollTop = 0;
                 currentPage = p;
             }
-            if (listView != null)
-                currentPage = listView.page(currentPage);
+            if (listView != null) {
+                if (typeof p !== 'undefined')
+                    currentPage = listView.page(currentPage);
+                else listView.status();
+            }
             return currentPage;
         });
 
