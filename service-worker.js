@@ -20,11 +20,11 @@ importScripts('workbox-sw.prod.v1.0.1.js');
 const fileManifest = [
   {
     "url": "./node_modules/zuix-dist/js/zuix.min.js",
-    "revision": "a8af4bd5b2f79fc50fb884c28705da61"
+    "revision": "26bf07cc4fd067fadc9a71be4ec106ea"
   },
   {
     "url": "./node_modules/zuix-dist/js/zuix.min.js.map",
-    "revision": "34cb0008eab42ec27e50efb018aec091"
+    "revision": "59736dc59bf64b63e825992a22449790"
   },
   {
     "url": "./img/android-chrome-144x144.png",
@@ -52,15 +52,15 @@ const fileManifest = [
   },
   {
     "url": "./js/app.js",
-    "revision": "bfa271437f282158ea6f01507930665b"
+    "revision": "83def5cf145b9d8630284252746a88ae"
   },
   {
     "url": "./app.bundle.js",
-    "revision": "c283718cf39ead16750c4a90d6c0fe47"
+    "revision": "b69c8fbc403eb454bc032bae5c43e617"
   },
   {
     "url": "./index.html",
-    "revision": "e20ac590f0c3a35a09b6e67e8b45e254"
+    "revision": "3a73bc8deb7b89c9357a0ee5bd106afc"
   }
 ];
 
