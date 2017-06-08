@@ -33,7 +33,10 @@ var app = new (function() {
     var currentFeed = null;
     var footerVisible = false;
 
-    // setup service worker
+    // Comment the following line to enable zuix debug output to console
+    window.zuixNoConsoleOutput = true;
+
+    // Setup service worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
             .register('./service-worker.js')

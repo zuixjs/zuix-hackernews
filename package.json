@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "moment-mini": "^2.18.1",
-    "zuix-dist": "^0.4.9-13"
+    "zuix-dist": "^0.4.9-14"
   },
   "devDependencies": {
     "http-server": "^0.9.0",

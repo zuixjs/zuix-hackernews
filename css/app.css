@@ -86,6 +86,7 @@ footer {
 }
 
 .page-button {
+    cursor: pointer;
     position: fixed;
     right:16px;
     bottom:16px;
