@@ -290,11 +290,8 @@
                         // event before obtaining a reference to the component context.
                         container = document.createElement('div');
                         // Set the component to load for this item
-                        //container.innerHTML = '<div class="spinner"><div></div><div></div><div></div><div></div></div>';
                         container.setAttribute('data-ui-load', dataItem.componentId);
                         container.setAttribute('data-ui-options', setItemOptions(i, dataItem.options));
-                        // TODO: the next line is a work around, otherwise element won't load - not sure if this is a bug
-                        dataItem.options.lazyLoad = false;
                     } else {
                         // This other method is a bit slower since the `createComponent`
                         // method involves other extra checks.
