@@ -46,7 +46,6 @@ zuix.controller(function (cp) {
 
                 // create the message component
                 var message = zuix.createComponent('components/hn_message', {
-                    lazyLoad: true,
                     // the `ready` callback
                     ready: function (ctx) {
                         // once the component is ready and visible we call its

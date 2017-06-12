@@ -56,7 +56,6 @@ zuix.controller(function (cp) {
         // comes into the user's screen's view (lazy-loading).
         zuix.$.each(item.kids, function (k, v) {
             var message = zuix.createComponent('components/hn_message', {
-                lazyLoad: true,
                 ready: function (ctx) {
                     ctx.load(v);
                 }

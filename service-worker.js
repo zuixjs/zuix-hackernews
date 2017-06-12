@@ -20,11 +20,11 @@ importScripts('workbox-sw.prod.v1.0.1.js');
 const fileManifest = [
   {
     "url": "./node_modules/zuix-dist/js/zuix.min.js",
-    "revision": "280cf53f34ce96e03564f1d5fc4fbc93"
+    "revision": "3693065adfec25a93c5ff4adc587bf17"
   },
   {
     "url": "./node_modules/zuix-dist/js/zuix.min.js.map",
-    "revision": "a3120d2b75e9d3b6ea5f7e0bd785c34f"
+    "revision": "6782aac470fa3015970146cda20a460d"
   },
   {
     "url": "./img/android-chrome-144x144.png",
@@ -56,7 +56,7 @@ const fileManifest = [
   },
   {
     "url": "./app.bundle.js",
-    "revision": "51897b09a1bb1b73b376d8538e9177d8"
+    "revision": "b0221ed749e48fca03ac77824dbdbd6d"
   },
   {
     "url": "./index.html",
