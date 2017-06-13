@@ -19,19 +19,19 @@ importScripts('workbox-sw.prod.v1.0.1.js');
  */
 const fileManifest = [
   {
-    "url": "/node_modules/zuix-dist/js/zuix.min.js",
+    "url": "./node_modules/zuix-dist/js/zuix.min.js",
     "revision": "3693065adfec25a93c5ff4adc587bf17"
   },
   {
-    "url": "/js/app.js",
+    "url": "./js/app.js",
     "revision": "8a983a86a0a30b9e97c1a14223a30c52"
   },
   {
-    "url": "/app.bundle.js",
+    "url": "./app.bundle.js",
     "revision": "a779797b353d9810d3b21c0714a1cb82"
   },
   {
-    "url": "/index.html",
+    "url": "./index.html",
     "revision": "7a4cfbe842d33c00a731c57e871f5f3d"
   }
 ];
