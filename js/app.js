@@ -26,7 +26,7 @@ var app = new (function() {
     zuix.using('style', 'css/animate.min.css'); // (<-- this is a minimal build)
     zuix.using('style', 'css/flex-layout-attribute.min.css');
     // Google 'Scope One' Fonts
-    zuix.using('style', 'https://fonts.googleapis.com/css?family=Scope+One');
+    //zuix.using('style', 'https://fonts.googleapis.com/css?family=Scope+One');
 
     // ---------- initialization stuff -------------
 

@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "start": "http-server ./",
-    "build": "workbox-cli generate:sw"
+    "build": "workbox-cli generate:sw; echo \"importScripts('service-worker.rc.js');\" >> service-worker.js"
   },
   "dependencies": {
     "moment-mini": "^2.18.1",
