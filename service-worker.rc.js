@@ -1,11 +1,11 @@
 // Hacker News API caching
 workboxSW.router.registerRoute(
-    'https://hacker-news.firebaseio.com/(.*)',
+    'https://hacker-news.firebaseio.com/v0/item/(.*)',
     workboxSW.strategies.cacheFirst({
         cacheName: 'stories',
         cacheExpiration: {
-            maxEntries: 1000,
-            maxAgeSeconds: 7 * 24 * 60 * 60
+            maxEntries: 500,
+            maxAgeSeconds: 120 // 2 minutes
         },
         cacheableResponse: {statuses: [0, 200]}
     })
