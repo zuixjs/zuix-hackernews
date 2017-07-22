@@ -246,6 +246,11 @@ window.firebase = new (function() {
                     }
                     item.shorturl = path;
                 }
+                if (item.score === 1) {
+                    item.score += ' point';
+                } else {
+                    item.score += ' points';
+                }
                 if (item.descendants > 0) {
                     item.comments = item.descendants + ' comment';
                     if (item.descendants > 1) item.comments += 's';
